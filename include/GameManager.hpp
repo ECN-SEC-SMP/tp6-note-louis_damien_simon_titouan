@@ -7,7 +7,7 @@ class GameManager
 {
 private:
     Board board;
-    std::array<Player, 4> &players;
+    std::array<Player *, 4> players;
     int roundCount;
 
 private:
@@ -25,7 +25,7 @@ private:
 
 public:
     // Constructor and Destructor
-    GameManager(std::array<Player, 4> &players);
+    GameManager(std::array<Player *, 4> players);
     ~GameManager();
 
     // Game turn management
