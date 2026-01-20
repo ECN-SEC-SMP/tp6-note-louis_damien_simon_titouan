@@ -1,0 +1,88 @@
+@startuml class_diagram
+
+class Otrio {
+    - gameManager: GameManager
+    - players: std::vector<Player>
+
+    + run()
+}
+
+class GameManager {
+    - board: Board
+    - players: std::array<4,Player&>
+    - round_count: int
+
+    - playRound()
+    - isLastRound(): bool
+    - checkWinConditions(frame_played: Frame): bool
+    - checkWinCondition1(frame_played: Frame): bool
+    - checkWinCondition2(frame_played: Frame): bool
+    - checkWinCondition3(frame_played: Frame): bool
+    - ...()
+
+    + startGame()
+}
+
+class Board {
+    - frames: std::array<3, std::array<3, Frame>>
+    + toString()
+}
+
+class Frame {
+    - smallCircle: Circle*
+    - mediumCircle: Circle*
+    - largeCircle: Circle*
+
+    + getCircle(size: CircleSize): Circle*
+    + tryToPlace(circle: Circle): bool
+    + toString()
+}
+
+class Circle {
+    - size: CircleSize
+    - color: Color
+
+    + getSize(): CircleSize
+    + getColor(): Color
+}
+
+class Player {
+    - color: Color
+    - nbSmallCircles: int
+    - nbMediumCircles: int
+    - nbLargeCircles: int
+
+    + placeCircle(gameManager: GameManager&)
+}
+
+class PlayerBot extends Player {
+    + placeCircle(gameManager: GameManager)
+}
+
+enum CircleSize {
+    SMALL
+    MEDIUM
+    LARGE
+}
+
+enum Color {
+    RED
+    GREEN
+    BLUE
+    BLACK
+}
+
+Otrio "1" *-- "1" GameManager
+GameManager "1" *-- "1" Board
+Board "1" *-- "9" Frame
+Circle -- CircleSize
+Circle -- Color
+Player -- Color
+Otrio "1" *-- "4" Player
+GameManager "1" *.. "4" Player
+
+Frame "1" *-- "3" Circle
+Player "1" *-- "3" Circle
+
+
+@enduml
