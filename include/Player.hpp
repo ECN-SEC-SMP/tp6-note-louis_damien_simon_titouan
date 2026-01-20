@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Circle.hpp"
+#include "GameManager.hpp"
 
 class Player
 {
@@ -17,6 +18,6 @@ public:
     Player(CircleColor color, std::string name);
     ~Player();
     void placeCircle(GameManager &gameManager);
-    CircleColor getColor();
-    std::string getName();
+    CircleColor getColor() const;
+    std::string getName() const;
 };

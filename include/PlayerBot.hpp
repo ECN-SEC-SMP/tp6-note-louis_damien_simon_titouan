@@ -7,10 +7,11 @@
 
 class GameManager;
 
-class PlayerBot : public Player {
-    public:
-        void placeCircle(GameManager &gameManager) const override;
+class PlayerBot : public Player
+{
+public:
+    PlayerBot(CircleColor color, std::string name);
+    ~PlayerBot();
 
-        PlayerBot(Color color,std::string name);
-        ~PlayerBot();
+    void placeCircle(GameManager &gameManager) override;
 };

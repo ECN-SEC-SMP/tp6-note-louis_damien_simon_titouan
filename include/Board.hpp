@@ -12,5 +12,5 @@ private:
 public:
     Board();
     ~Board();
-    std::string toString();
+    std::string toString() const;
 };

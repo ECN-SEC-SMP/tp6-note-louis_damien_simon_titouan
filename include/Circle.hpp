@@ -24,6 +24,6 @@ private:
 public:
     Circle(CircleColor color, CircleSize size);
     ~Circle();
-    CircleColor getColor();
-    CircleSize getSize();
+    CircleColor getColor() const;
+    CircleSize getSize() const;
 };

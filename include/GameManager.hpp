@@ -3,29 +3,31 @@
 #include "Board.hpp"
 #include "Player.hpp"
 
-
 class GameManager
-    {
-    private :
-        Board board;
-        std::array<Player, 4>& players;
-        int roundCount;
+{
+private:
+    Board board;
+    std::array<Player, 4> &players;
+    int roundCount;
 
-    public :
-        // Constructor and Destructor
-        GameManager(std::array<Player, 4>& players);
-        ~GameManager();
+private:
+    // Check Win
+    bool checkWinConditions(const Frame frame_played) const;
+    bool checkWinCondition1(const Frame frame_played) const;
+    bool checkWinCondition2(const Frame frame_played) const;
+    bool checkWinCondition3(const Frame frame_played) const;
 
-        // Check Win
-        bool checkWinConditions(const Frame frame_played);
-        bool checkWinCondition1(const Frame frame_played);
-        bool checkWinCondition2(const Frame frame_played);
-        bool checkWinCondition3(const Frame frame_played);
-        
-        // Game turn management
-        void startGame();
-        void playRound();
+    // Game turn management
+    void playRound();
 
-        // Tool function
-        bool isLastRound();
-    };
+    // Tool function
+    bool isLastRound() const;
+
+public:
+    // Constructor and Destructor
+    GameManager(std::array<Player, 4> &players);
+    ~GameManager();
+
+    // Game turn management
+    void startGame();
+};
