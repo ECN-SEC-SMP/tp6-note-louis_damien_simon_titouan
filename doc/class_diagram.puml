@@ -9,7 +9,7 @@ class Otrio {
 
 class GameManager {
     - board: Board
-    - players: std::array<4,Player&>
+    - players: std::array<Player*, 4>
     - round_count: int
 
     - playRound(): void
@@ -20,11 +20,12 @@ class GameManager {
     - checkWinCondition3(frame_played: Frame): bool
     - ...()
 
+    + GameManager(players: std::array<Player *, 4>)
     + startGame()
 }
 
 class Board {
-    - frames: std::array<3, std::array<3, Frame>>
+    - frames: std::array<std::array<Frame, 3>, 3>
     + toString()
 }
 
