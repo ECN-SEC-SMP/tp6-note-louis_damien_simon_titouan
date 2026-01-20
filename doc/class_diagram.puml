@@ -12,7 +12,7 @@ class GameManager {
     - players: std::array<4,Player&>
     - round_count: int
 
-    - playRound()
+    - playRound(): void
     - isLastRound(): bool
     - checkWinConditions(frame_played: Frame): bool
     - checkWinCondition1(frame_played: Frame): bool
@@ -35,28 +35,32 @@ class Frame {
 
     + getCircle(size: CircleSize): Circle*
     + tryToPlace(circle: Circle): bool
-    + toString()
+    + toString(): std::string
 }
 
 class Circle {
     - size: CircleSize
-    - color: Color
+    - color: CircleColor
 
     + getSize(): CircleSize
-    + getColor(): Color
+    + getColor(): CircleColor
 }
 
 class Player {
-    - color: Color
+    - color: CircleColor
+    - name: std::string
     - nbSmallCircles: int
     - nbMediumCircles: int
     - nbLargeCircles: int
 
-    + placeCircle(gameManager: GameManager&)
+    + Player(CircleColor color, std::string name)
+    + placeCircle(gameManager: GameManager&): void
+    + getColor(): CircleColor
+    + getName(): std::string
 }
 
 class PlayerBot extends Player {
-    + placeCircle(gameManager: GameManager)
+    + placeCircle(gameManager: GameManager&): void
 }
 
 enum CircleSize {
@@ -65,7 +69,7 @@ enum CircleSize {
     LARGE
 }
 
-enum Color {
+enum CircleColor {
     RED
     GREEN
     BLUE
@@ -76,8 +80,8 @@ Otrio "1" *-- "1" GameManager
 GameManager "1" *-- "1" Board
 Board "1" *-- "9" Frame
 Circle -- CircleSize
-Circle -- Color
-Player -- Color
+Circle -- CircleColor
+Player -- CircleColor
 Otrio "1" *-- "4" Player
 GameManager "1" *.. "4" Player
 
