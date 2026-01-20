@@ -5,14 +5,19 @@
 #include "GameManager.hpp"
 #include "Player.hpp"
 
+#define OTRIO_MAX_PLAYER 4
+
 class Otrio
 {
 private:
-    GameManager gameManager;
-    std::vector<Player> players;
+    std::vector<Player *> players;
+    std::vector<CircleColor> freeColors;
 
 public:
     Otrio();
     ~Otrio();
     int run();
+    std::vector<Player *> &getPlayers();
+    void addPlayer(std::string player_name);
+    void removePlayer(Player *player);
 };

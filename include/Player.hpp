@@ -3,7 +3,8 @@
 #include <string>
 
 #include "Circle.hpp"
-#include "GameManager.hpp"
+
+class GameManager;
 
 class Player
 {
