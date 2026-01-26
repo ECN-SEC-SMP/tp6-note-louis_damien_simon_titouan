@@ -1,14 +1,17 @@
 #pragma once
 
+#include <vector>
+
 #include "ANSI.hpp"
+#include "Player.hpp"
 
 /// @brief Game banner to display above each windows
 #define GAME_ASCII_BANNER ANSI_BOLD ANSI_BLUE "\
-  ___  _        _       \
- / _ \\| |_ _ __(_) ___  \
-| | | | __| '__| |/ _ \\ \
-| |_| | |_| |  | | (_) |\
- \\___/ \\__|_|  |_|\\___/ \
+  ___  _        _       \n\
+ / _ \\| |_ _ __(_) ___  \n\
+| | | | __| '__| |/ _ \\ \n\
+| |_| | |_| |  | | (_) |\n\
+ \\___/ \\__|_|  |_|\\___/ \n\
     " ANSI_RESET_BOLD ANSI_ITALIC ANSI_UNDERLINE "By Les Quadruples Montres\n\n" ANSI_RESET
 
 /* Board ==================================================================== */
@@ -91,3 +94,14 @@
           > `-.`='.-' <             \n\
         .'             `.           \n\
          `-._________.-'            \n" ANSI_RESET
+
+namespace DisplayUtils
+{
+  /**
+   * @brief Get the Player List for display
+   *
+   * @param players
+   * @return std::string
+   */
+  std::string getStringFromPlayerList(std::vector<Player *> players);
+} // namespace DisplayUtils
