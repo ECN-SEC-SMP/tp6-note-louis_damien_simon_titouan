@@ -103,5 +103,5 @@ namespace DisplayUtils
    * @param players
    * @return std::string
    */
-  std::string getPlayerList(std::vector<Player *> players);
+  std::string getStringFromPlayerList(std::vector<Player *> players);
 } // namespace DisplayUtils
