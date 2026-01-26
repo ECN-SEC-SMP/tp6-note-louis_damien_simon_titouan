@@ -5,7 +5,7 @@ enum CircleColor
     RED,
     GREEN,
     BLUE,
-    MAGENTA
+    ORANGE
 };
 
 enum CircleSize

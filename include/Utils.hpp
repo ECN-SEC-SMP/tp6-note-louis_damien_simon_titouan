@@ -11,9 +11,9 @@ namespace Utils
     void newRandomSeed();
 
     /**
-     * @brief Get a random number between 0 to max
+     * @brief Get a random number between 0 and max
      *
-     * @param max (IN) Max random number
+     * @param[in] max Max random number
      * @return int
      */
     int getRandomNumber(int max);
@@ -21,25 +21,25 @@ namespace Utils
     /**
      * @brief Sleep for X milliseconds
      *
-     * @param milliseconds (IN) Sleeping duration in milliseconds
+     * @param[in] milliseconds Sleeping duration in milliseconds
      */
     void sleep(int milliseconds);
 
     /**
      * @brief Test if a string is a number
      *
-     * @param s (IN) String to test
+     * @param[in] s String to test
      * @return true if the string is a number
      * @return false otherwise (letters, special chars, empty, ...)
      */
-    bool is_number(const std::string &s);
+    bool isNumber(const std::string &s);
 
     /**
      * @brief Trim a string
      * @note This function remove leading and trailing spaces
      *
-     * @param str (IN) Input string
-     * @param whitespace (IN) Space to remove
+     * @param[in] str Input string
+     * @param[in] whitespace Space to remove
      * @return std::string result
      */
     std::string trim(const std::string &str, const std::string &whitespace = " \t");
@@ -48,9 +48,9 @@ namespace Utils
      * @brief Reduce a string
      * @note This function remove leading and trailing spaces and replace spaces in string by content of fill argument
      *
-     * @param str (IN) Input string
-     * @param fill (IN) String to replace whitespace in middle of input string
-     * @param whitespace (IN) Space to remove
+     * @param[in] str Input string
+     * @param[in] fill String to replace whitespace in middle of input string
+     * @param[in] whitespace Space to remove
      * @return std::string
      */
     std::string reduce(const std::string &str, const std::string &fill = " ", const std::string &whitespace = " \t");

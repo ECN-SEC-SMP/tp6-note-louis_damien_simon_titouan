@@ -21,7 +21,7 @@ void Utils::sleep(int milliseconds)
     std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 
-bool Utils::is_number(const std::string &s)
+bool Utils::isNumber(const std::string &s)
 {
     return !s.empty() && std::find_if(s.begin(),
                                       s.end(), [](unsigned char c)

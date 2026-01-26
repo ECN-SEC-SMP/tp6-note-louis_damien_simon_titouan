@@ -33,22 +33,22 @@ public:
      */
     void placeCircle(GameManager &gameManager);
     /**
-     * @brief Get the Color
+     * @brief Get the Player Color
      *
      * @return CircleColor Color of the player
      */
     CircleColor getColor() const;
     /**
-     * @brief Get the Name
+     * @brief Get the Player Name
      *
      * @return std::string Name of the player
      */
     std::string getName() const;
     /**
-     * @brief Get the Inventory
+     * @brief Get the Player Inventory
      * @details nbSmallCircles, nbMediumCircles, nbLargeCircles
      *
      * @return std::tuple<int, int, int>
      */
-    std::tuple<int, int, int> getIventory() const;
+    std::tuple<int, int, int> getInventory() const;
 };
