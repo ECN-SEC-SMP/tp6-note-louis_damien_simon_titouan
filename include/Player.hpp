@@ -5,6 +5,7 @@
 
 #include "Circle.hpp"
 
+// Avoid circular include
 class GameManager;
 
 class Player
@@ -32,19 +33,19 @@ public:
      */
     void placeCircle(GameManager &gameManager);
     /**
-     * @brief Get the Color object
+     * @brief Get the Color
      *
      * @return CircleColor Color of the player
      */
     CircleColor getColor() const;
     /**
-     * @brief Get the Name object
+     * @brief Get the Name
      *
      * @return std::string Name of the player
      */
     std::string getName() const;
     /**
-     * @brief Get the Iventory object
+     * @brief Get the Inventory
      * @details nbSmallCircles, nbMediumCircles, nbLargeCircles
      *
      * @return std::tuple<int, int, int>

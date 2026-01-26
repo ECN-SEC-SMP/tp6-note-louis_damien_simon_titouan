@@ -30,7 +30,7 @@ namespace Utils
      *
      * @param s (IN) String to test
      * @return true if the string is a number
-     * @return false else (letters, special chars, empty, ...)
+     * @return false otherwise (letters, special chars, empty, ...)
      */
     bool is_number(const std::string &s);
 
