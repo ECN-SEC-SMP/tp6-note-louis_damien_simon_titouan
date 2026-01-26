@@ -33,8 +33,8 @@ int Otrio::run()
     int pos = 1;
     while (running)
     {
-        main_menu.setTitle(GAME_ASCII_BANNER ANSI_BOLD "Main Menu\n\n" ANSI_RESET + DisplayUtils::getPlayerList(this->players)); // Actualize title
-        main_menu.setOptionPos(pos);                                                                                             // Keep last position
+        main_menu.setTitle(GAME_ASCII_BANNER ANSI_BOLD "Main Menu\n\n" ANSI_RESET + DisplayUtils::getStringFromPlayerList(this->players)); // Actualize title
+        main_menu.setOptionPos(pos);                                                                                                       // Keep last position
         pos = main_menu.run();
     }
     return 0;
