@@ -30,28 +30,28 @@ Circle *Frame::getCircle(CircleSize size)
     }
 }
 
-bool Frame::tryToPlace(Circle *circle)
+bool Frame::tryToPlace(CircleColor color, CircleSize size)
 {
-    switch (circle->getSize())
+    switch (size)
     {
     case SMALL:
         if (this->smallCircle == nullptr)
         {
-            this->smallCircle = circle;
+            this->smallCircle = new Circle(color, size);
             return true;
         }
 
     case MEDIUM:
         if (this->mediumCircle == nullptr)
         {
-            this->mediumCircle = circle;
+            this->mediumCircle = new Circle(color, size);
             return true;
         }
 
     case LARGE:
         if (this->largeCircle == nullptr)
         {
-            this->largeCircle = circle;
+            this->largeCircle = new Circle(color, size);
             return true;
         }
     }

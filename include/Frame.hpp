@@ -15,6 +15,6 @@ public:
     Frame();
     ~Frame();
     Circle *getCircle(CircleSize size);
-    bool tryToPlace(Circle *circle);
+    bool tryToPlace(CircleColor color, CircleSize size);
     std::string toString() const;
 };
