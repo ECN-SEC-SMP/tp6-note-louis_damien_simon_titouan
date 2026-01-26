@@ -30,28 +30,33 @@ Circle *Frame::getCircle(CircleSize size)
     }
 }
 
-bool Frame::tryToPlace(Circle circle)
+bool Frame::tryToPlace(Circle *circle)
 {
-    switch (circle.getSize())
+    switch (circle->getSize())
     {
     case SMALL:
         if (this->smallCircle == nullptr)
-            this->smallCircle = &circle;
-        return true;
+        {
+            this->smallCircle = circle;
+            return true;
+        }
 
     case MEDIUM:
         if (this->mediumCircle == nullptr)
-            this->mediumCircle = &circle;
-        return true;
+        {
+            this->mediumCircle = circle;
+            return true;
+        }
 
     case LARGE:
         if (this->largeCircle == nullptr)
-            this->largeCircle = &circle;
-        return true;
-
-    default:
-        return false;
+        {
+            this->largeCircle = circle;
+            return true;
+        }
     }
+
+    return false;
 }
 
 std::string Frame::toString() const
