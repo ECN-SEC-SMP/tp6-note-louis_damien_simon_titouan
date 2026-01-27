@@ -30,8 +30,10 @@ public:
      * @brief Prompt player and place his circle
      *
      * @param[inout] gameManager Reference of parent game manager instance
+     *
+     * @return std::pair<int, int> Coordinates of the placed circle
      */
-    void placeCircle(GameManager &gameManager);
+    std::pair<int, int> placeCircle(GameManager &gameManager);
     /**
      * @brief Get the Player Color
      *
