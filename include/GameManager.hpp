@@ -9,23 +9,21 @@
 #include <iostream>
 #include <array>
 
-
 #define NBROUND 27
 class GameManager
 {
-protected :  
+protected:
     Board board;
     std::array<Player *, 4> players;
     int roundCount;
-    Player * winnerPlayer;
-    
-    public:
+    Player *winnerPlayer;
+
+public:
     // Check Win
     bool checkWinConditions(const int x, const int y, const CircleColor targetColor) const;
     bool checkWinCondition1(const Frame frame_played) const;
     bool checkWinCondition2(const Frame frame_played) const;
     bool checkWinCondition3(const Frame frame_played) const;
-
 
     // Game turn management
     void manageGame();
@@ -36,14 +34,14 @@ protected :
     bool isLastRound() const;
     void choosePlayerOrder();
     // Constructor and Destructor
-    GameManager(std::vector<Player*> &newPlayers);
+    GameManager(std::array<Player *, 4> &newPlayers);
     ~GameManager();
 
-    //Getters and setters
+    // Getters and setters
     int getRoundCount() const;
     void setRoundCount(int roundCount);
     void incrementRoundCount(int n);
-    void setWinner(Player * winner);
+    void setWinner(Player *winner);
 
     // Game turn management
     void startGame();
