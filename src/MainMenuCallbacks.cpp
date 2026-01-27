@@ -31,22 +31,20 @@ bool MainMenu::CB_printHelp(int pos, Menu *m)
     return true;
 }
 
-Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &gm)
+Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &otrio)
 {
     auto lambda_cb = [&](int pos, Menu *m)
     {
-        
-
         return false;
     };
     return lambda_cb;
 }
 
-Menu::MenuCallback_t MainMenu::addPlayer_CBBuilder(Otrio &gm)
+Menu::MenuCallback_t MainMenu::addPlayer_CBBuilder(Otrio &otrio)
 {
     auto lambda_cb = [&](int pos, Menu *m)
     {
-        if (gm.getPlayers().size() == OTRIO_MAX_PLAYER)
+        if (otrio.getPlayers().size() == OTRIO_MAX_PLAYER)
         {
             Menu player_menu(GAME_ASCII_BANNER ANSI_BOLD "\nMax player count reachded.\n" ANSI_RESET, 0);
             player_menu.addOption("Back");
@@ -55,7 +53,7 @@ Menu::MenuCallback_t MainMenu::addPlayer_CBBuilder(Otrio &gm)
         }
 
         Menu player_menu(GAME_ASCII_BANNER ANSI_BOLD "Add Player\n" ANSI_ITALIC "(Set player name on first option)\n" ANSI_RESET, 0);
-        // player_menu.setColorSelection(gm.getBoardTheme().menu_selection_color);
+        // player_menu.setColorSelection(otrio.getBoardTheme().menu_selection_color);
         player_menu.addOption("Player name: ").addOption("Cancel.");
         std::string player_name;
         int sel_pos;
@@ -71,7 +69,7 @@ Menu::MenuCallback_t MainMenu::addPlayer_CBBuilder(Otrio &gm)
         if (sel_pos == 1)
         {
             bool found = false;
-            for (auto &&player : gm.getPlayers())
+            for (auto &&player : otrio.getPlayers())
             {
                 if (player->getName() == player_name)
                 {
@@ -86,7 +84,7 @@ Menu::MenuCallback_t MainMenu::addPlayer_CBBuilder(Otrio &gm)
             }
             else
             {
-                gm.addPlayer(player_name);
+                otrio.addPlayer(player_name);
             }
         }
 
@@ -95,29 +93,29 @@ Menu::MenuCallback_t MainMenu::addPlayer_CBBuilder(Otrio &gm)
     return lambda_cb;
 }
 
-Menu::MenuCallback_t MainMenu::removePlayer_CBBuilder(Otrio &gm)
+Menu::MenuCallback_t MainMenu::removePlayer_CBBuilder(Otrio &otrio)
 {
     auto lambda_cb = [&](int pos, Menu *m)
     {
         Menu player_menu(GAME_ASCII_BANNER ANSI_BOLD "Remove Player\n" ANSI_RESET, 0);
-        // player_menu.setColorSelection(gm.getBoardTheme().menu_selection_color);
+        // player_menu.setColorSelection(otrio.getBoardTheme().menu_selection_color);
         player_menu.preventArguments();
-        for (auto &&player : gm.getPlayers())
+        for (auto &&player : otrio.getPlayers())
         {
             player_menu.addOption(player->getName());
         }
         player_menu.addOption("Cancel.");
         int player_pos = player_menu.run();
-        if (player_pos > 0 && player_pos <= (int)gm.getPlayers().size())
+        if (player_pos > 0 && player_pos <= (int)otrio.getPlayers().size())
         {
-            gm.removePlayer(gm.getPlayers().at(player_pos - 1));
+            otrio.removePlayer(otrio.getPlayers().at(player_pos - 1));
         }
         return false;
     };
     return lambda_cb;
 }
 
-Menu::MenuCallback_t MainMenu::gameMode_CBBuilder(Otrio &gm)
+Menu::MenuCallback_t MainMenu::gameMode_CBBuilder(Otrio &otrio)
 {
     auto lambda_cb = [&](int pos, Menu *m)
     {
@@ -126,11 +124,11 @@ Menu::MenuCallback_t MainMenu::gameMode_CBBuilder(Otrio &gm)
 
         if (index == 1)
         {
-            gm.changeGameMode(TWO_PLAYER);
+            otrio.changeGameMode(TWO_PLAYER);
         }
         else if (index == 2)
         {
-            gm.changeGameMode(FOUR_PLAYER);
+            otrio.changeGameMode(FOUR_PLAYER);
         }
 
         return false;
@@ -138,7 +136,7 @@ Menu::MenuCallback_t MainMenu::gameMode_CBBuilder(Otrio &gm)
     return lambda_cb;
 }
 
-// Menu::MenuCallback_t MainMenu::function_CBBuilder(Otrio &gm)
+// Menu::MenuCallback_t MainMenu::function_CBBuilder(Otrio &otrio)
 // {
 //     auto lambda_cb = [&](int pos, Menu *m)
 //     {
