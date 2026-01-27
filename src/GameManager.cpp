@@ -1,10 +1,4 @@
 #include "GameManager.hpp"
-#include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <random>
-#include <iostream>
-#include <array>
 
 void GameManager::incrementRoundCount(int n){
     this->roundCount+=n;
@@ -31,42 +25,62 @@ GameManager::GameManager(std::vector<Player*> &newPlayers): board(), roundCount(
     }
 }
 
-GameManager::~GameManager() {
+GameManager::~GameManager() {    // Free memory
 
+    // Free memory
+    for(int i = 0; i < 4; i++){
+        delete this->players[i];
+        this->players[i] = nullptr;
+    }
 }
-
-void GameManager::startGame(){
+void GameManager::ManageGame(){
     // Try and Catch exceptions
     try {
-        // Init everything
-        choosePlayerOrder();
-        setRoundCount(0);
-        playRound();
+        startGame();
+        manageRounds();
     } catch (const std::exception& e) {
         std::cerr << "Game error: " << e.what() << std::endl;
     }
+}
+void GameManager::startGame(){  
+    // Init everything
+    choosePlayerOrder();
+    setRoundCount(0);    // Free memory
+
 }
 
 void GameManager::choosePlayerOrder(){
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::shuffle(this->players.begin(), this->players.end(), gen);  // ✓ Fonctionne aussi avec std::vector
+    // Randomise players orders
+    std::shuffle(this->players.begin(), this->players.end(), gen);  
 }
 
-void GameManager::playRound(){
-    if(!isLastRound()){
-        incrementRoundCount(1);
-        for(int i=0; i<4; i++){
-            this->players[i]->placeCircle(*this);
-            if (checkWinConditions()){
-                this->players[i]->getColor(),
-                std::cout<<"bravo!!"<<std::endl;
-                // TODO: ending function
-                return;  // Exit if someone wins
-            }
+bool GameManager::playRound(){
+    // Play one round
+    for(int i=0; i<4; i++){
+        std::pair<int, int> position = this->players[i]->placeCircle(*this);
+
+        
+        if (checkWinConditions( position.first, position.second, this->players[i]->getColor())){
+            this->players[i]->getColor(),
+            std::cout<<"bravo!!"<<std::endl;
+            // TODO: ending function
+            return true;
         }
-        playRound();  // Continue to next round
     }
+    return false;
+}
+
+void GameManager::manageRounds(){
+    bool playerWin=false;
+
+    // Exit  if there is a winner or all round has been played
+    while(isLastRound()==false && playerWin==false){
+        incrementRoundCount(1);
+        playerWin = playRound(); 
+    }
+    std::cout<<"Game over"<<std::endl;
 }
 
 bool GameManager::isLastRound() const{
@@ -79,12 +93,12 @@ bool GameManager::isLastRound() const{
         return false;
     }
     else{
-    // Raise exception if the roundcount is invalid
-    throw std::range_error("Number of round is out of allowed range");  
+        // Raise exception if the roundcount is invalid
+        throw std::range_error("Number of round is out of allowed range");  
     }
 }
 
-bool GameManager::checkWinConditions() const{
+bool GameManager::checkWinConditions([[maybe_unused]] const int x, [[maybe_unused]] const int y, [[maybe_unused]] const CircleColor targetColor) const{
     // TODO: Implementation needed
     return false;
 }

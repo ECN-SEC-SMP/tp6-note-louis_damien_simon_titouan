@@ -9,6 +9,7 @@
 #include <iostream>
 #include <array>
 
+
 #define nbRound 27
 class GameManager
 {
@@ -20,13 +21,16 @@ protected :
     
     public:
     // Check Win
-    bool checkWinConditions() const;
+    bool checkWinConditions(const int x, const int y, const CircleColor targetColor) const;
     bool checkWinCondition1(const Frame frame_played) const;
     bool checkWinCondition2(const Frame frame_played) const;
     bool checkWinCondition3(const Frame frame_played) const;
 
+
     // Game turn management
-    void playRound();
+    void ManageGame();
+    void manageRounds();
+    bool playRound();
 
     // Tool function
     bool isLastRound() const;

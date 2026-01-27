@@ -5,45 +5,48 @@
 #include <vector>
 #include <stdexcept>
 
-// Helper: create valid players
-std::vector<Player> createPlayers(int count) {
-    std::vector<Player> players;
+// Helper: create valid player pointers (allocated dynamically)
+std::vector<Player*> createPlayerPointers(int count) {
+    std::vector<Player*> ptrs;
     CircleColor colors[] = {CircleColor::RED, CircleColor::BLUE, CircleColor::GREEN, CircleColor::BLACK};
     for (int i = 0; i < count && i < 4; i++) {
-        players.push_back(Player(colors[i], "Player" + std::to_string(i + 1)));
-    }
-    return players;
-}
-
-// Helper: create valid player pointers
-std::vector<Player*> createPlayerPointers(std::vector<Player>& players) {
-    std::vector<Player*> ptrs;
-    for(auto& p : players) {
-        ptrs.push_back(&p);
+        ptrs.push_back(new Player(colors[i], "Player" + std::to_string(i + 1)));
     }
     return ptrs;
+}
+
+// Helper: cleanup player pointers not managed by GameManager
+void cleanupPlayers(std::vector<Player*>& players) {
+    for(auto p : players) {
+        delete p;
+    }
+    players.clear();
 }
 
 // CONSTRUCTOR TESTS
 
 // Test: constructor with 4 players succeeds
 TEST(GameManagerTest, ConstructorWithFourPlayers) {
-    std::vector<Player> players = createPlayers(4);
-    std::vector<Player*> playerPtrs = createPlayerPointers(players);
-    EXPECT_NO_THROW(GameManager gm(playerPtrs));
+    std::vector<Player*> playerPtrs = createPlayerPointers(4);
+    EXPECT_NO_THROW({
+        GameManager gm(playerPtrs);
+        // GameManager destructor will delete players
+    });
 }
 
 // Test: constructor with wrong number throws exception
 TEST(GameManagerTest, ConstructorThrowsWithWrongNumber) {
-    std::vector<Player> players = createPlayers(2);
-    std::vector<Player*> playerPtrs = createPlayerPointers(players);
-    EXPECT_THROW(GameManager gm(playerPtrs), std::invalid_argument);
+    std::vector<Player*> playerPtrs = createPlayerPointers(2);
+    EXPECT_THROW({
+        GameManager gm(playerPtrs);
+    }, std::invalid_argument);
+    // Cleanup manually since GameManager was not constructed
+    cleanupPlayers(playerPtrs);
 }
 
 // Test: constructor initializes round count to 0
 TEST(GameManagerTest, ConstructorInitializesRoundCount) {
-    std::vector<Player> players = createPlayers(4);
-    std::vector<Player*> playerPtrs = createPlayerPointers(players);
+    std::vector<Player*> playerPtrs = createPlayerPointers(4);
     GameManager gm(playerPtrs);
     EXPECT_EQ(gm.getRoundCount(), 0);
 }
@@ -52,44 +55,65 @@ TEST(GameManagerTest, ConstructorInitializesRoundCount) {
 
 // Test: choosePlayerOrder doesn't crash
 TEST(GameManagerTest, ChoosePlayerOrderRuns) {
-    std::vector<Player> players = createPlayers(4);
-    std::vector<Player*> playerPtrs = createPlayerPointers(players);
+    std::vector<Player*> playerPtrs = createPlayerPointers(4);
     GameManager gm(playerPtrs);
     EXPECT_NO_THROW(gm.choosePlayerOrder());
 }
 
-// PLAYROUND TESTS
+// ROUND COUNT TESTS
 
-// Test: playRound runs until max rounds
-TEST(GameManagerTest, PlayRoundRunsUntilMax) {
-    std::vector<Player> players = createPlayers(4);
-    std::vector<Player*> playerPtrs = createPlayerPointers(players);
+// Test: getRoundCount returns correct value
+TEST(GameManagerTest, GetRoundCount) {
+    std::vector<Player*> playerPtrs = createPlayerPointers(4);
     GameManager gm(playerPtrs);
-    gm.setRoundCount(0);
-    gm.playRound();
-    EXPECT_EQ(gm.getRoundCount(), nbRound);
+    EXPECT_EQ(gm.getRoundCount(), 0);
 }
 
-// Test: playRound doesn't execute when at max rounds
-TEST(GameManagerTest, PlayRoundStopsAtMax) {
-    std::vector<Player> players = createPlayers(4);
-    std::vector<Player*> playerPtrs = createPlayerPointers(players);
+
+// PLAYROUND TESTS
+
+// Test: playRound returns false when no winner (simplified)
+TEST(GameManagerTest, PlayRoundNoWinner) {
+    std::vector<Player*> playerPtrs = createPlayerPointers(4);
+    GameManager gm(playerPtrs);
+    // playRound should return false since checkWinConditions returns false
+    bool result = gm.playRound();
+    EXPECT_FALSE(result);
+}
+
+// ISLASTROUND TESTS
+
+// Test: isLastRound returns false when round < nbRound
+TEST(GameManagerTest, IsLastRoundReturnsFalse) {
+    std::vector<Player*> playerPtrs = createPlayerPointers(4);
+    GameManager gm(playerPtrs);
+    gm.setRoundCount(10);
+    EXPECT_FALSE(gm.isLastRound());
+}
+
+// Test: isLastRound returns true when round == nbRound
+TEST(GameManagerTest, IsLastRoundReturnsTrue) {
+    std::vector<Player*> playerPtrs = createPlayerPointers(4);
     GameManager gm(playerPtrs);
     gm.setRoundCount(nbRound);
-    gm.playRound();
-    EXPECT_EQ(gm.getRoundCount(), nbRound);
+    EXPECT_TRUE(gm.isLastRound());
+}
+
+// Test: isLastRound throws exception when round > nbRound
+TEST(GameManagerTest, IsLastRoundThrowsException) {
+    std::vector<Player*> playerPtrs = createPlayerPointers(4);
+    GameManager gm(playerPtrs);
+    gm.setRoundCount(nbRound + 1);
+    EXPECT_THROW(gm.isLastRound(), std::range_error);
 }
 
 // STARTGAME TESTS
 
-// Test: startGame initializes round count to 0
-TEST(GameManagerTest, StartGameResetsRoundCount) {
-    std::vector<Player> players = createPlayers(4);
-    std::vector<Player*> playerPtrs = createPlayerPointers(players);
+// Test: startGame initializes round count to 0 and calls choosePlayerOrder
+TEST(GameManagerTest, StartGameInitializes) {
+    std::vector<Player*> playerPtrs = createPlayerPointers(4);
     GameManager gm(playerPtrs);
     gm.setRoundCount(10);
-    // Note: startGame would run indefinitely, so we test only initialization
-    EXPECT_NO_THROW(gm.choosePlayerOrder());
-    gm.setRoundCount(0);
+    gm.startGame();
     EXPECT_EQ(gm.getRoundCount(), 0);
 }
