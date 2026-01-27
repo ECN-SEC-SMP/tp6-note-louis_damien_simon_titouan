@@ -62,6 +62,7 @@ bool Frame::tryToPlace(CircleColor color, CircleSize size)
             this->smallCircle = new Circle(color, size);
             return true;
         }
+        break;
 
     case MEDIUM:
         if (this->mediumCircle == nullptr)
@@ -69,6 +70,7 @@ bool Frame::tryToPlace(CircleColor color, CircleSize size)
             this->mediumCircle = new Circle(color, size);
             return true;
         }
+        break;
 
     case LARGE:
         if (this->largeCircle == nullptr)
@@ -76,6 +78,7 @@ bool Frame::tryToPlace(CircleColor color, CircleSize size)
             this->largeCircle = new Circle(color, size);
             return true;
         }
+        break;
     }
 
     return false;
