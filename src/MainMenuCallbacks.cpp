@@ -3,6 +3,7 @@
 #include "MainMenuCallbacks.hpp"
 #include "DisplayUtils.hpp"
 #include "Utils.hpp"
+#include "PlayerBot.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 //                            MainMenu Functions                              //
@@ -35,6 +36,76 @@ Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &otrio)
 {
     auto lambda_cb = [&](int pos, Menu *m)
     {
+        /// Check if there is at least one player
+        if (otrio.getPlayers().empty())
+        {
+            std::cout << ANSI_BOLD "There is no player..." ANSI_RESET << std::endl;
+            CONTINUE_ON_ENTER_PROMPT
+            return false;
+        }
+
+        /// Prepare players
+        std::array<Player *, 4> real_players;
+        if (otrio.getGameMode() == FOUR_PLAYER)
+        {
+            int i = 0;
+            // Add all available players
+            for (auto &&p : otrio.getPlayers())
+            {
+                real_players[i] = p;
+                i++;
+            }
+            // If players list is not full, add bots to complete
+            if (i < 4)
+            {
+                auto availableColor = otrio.getAvailableCircleColor();
+                for (int j = i; j < 4; j++)
+                {
+                    real_players[j] = new PlayerBot(availableColor.back(), "Bot " + std::to_string(j));
+                    availableColor.pop_back();
+                }
+            }
+        }
+        else if (otrio.getGameMode() == TWO_PLAYER)
+        {
+            int i = 0;
+            auto availableColor = otrio.getAvailableCircleColor();
+            // Add all available players
+            for (auto &&p : otrio.getPlayers())
+            {
+                real_players[i] = p;
+                real_players[i + 2] = new Player(availableColor.back(), p->getName());
+                availableColor.pop_back();
+                i++;
+            }
+            // If players list is not full, add bots to complete
+            if (i < 2)
+            {
+                real_players[1] = new PlayerBot(availableColor.back(), "Bot");
+                availableColor.pop_back();
+                real_players[3] = new PlayerBot(availableColor.back(), "Bot");
+                availableColor.pop_back();
+            }
+        }
+
+        /// Setup GameManager
+        GameManager gameManager(real_players);
+
+        /// Launch Game
+        gameManager.startGame();
+
+        /// Display Winner
+        Player *winner = gameManager.getWinner();
+        if (winner)
+        {
+            Menu::clear();
+            // #TODO: print board
+            std::cout << std::endl
+                      << winner->getName() + " won the game!" << std::endl
+                      << std::endl;
+        }
+        CONTINUE_ON_ENTER_PROMPT
+
         return false;
     };
     return lambda_cb;
@@ -44,6 +115,7 @@ Menu::MenuCallback_t MainMenu::addPlayer_CBBuilder(Otrio &otrio)
 {
     auto lambda_cb = [&](int pos, Menu *m)
     {
+        /// Check max players
         if (otrio.getPlayers().size() == OTRIO_MAX_PLAYER)
         {
             Menu player_menu(GAME_ASCII_BANNER ANSI_BOLD "\nMax player count reachded.\n" ANSI_RESET, 0);
@@ -52,9 +124,12 @@ Menu::MenuCallback_t MainMenu::addPlayer_CBBuilder(Otrio &otrio)
             return false;
         }
 
+        /// Prepare Menu
         Menu player_menu(GAME_ASCII_BANNER ANSI_BOLD "Add Player\n" ANSI_ITALIC "(Set player name on first option)\n" ANSI_RESET, 0);
         // player_menu.setColorSelection(otrio.getBoardTheme().menu_selection_color);
         player_menu.addOption("Player name: ").addOption("Cancel.");
+
+        /// Get and prepare player name
         std::string player_name;
         int sel_pos;
         do
@@ -66,8 +141,10 @@ Menu::MenuCallback_t MainMenu::addPlayer_CBBuilder(Otrio &otrio)
             player_name = Utils::reduce(player_name, "_");
         } while (player_name.empty() && sel_pos == 1);
 
+        /// Try to add new player
         if (sel_pos == 1)
         {
+            // Check if player exists
             bool found = false;
             for (auto &&player : otrio.getPlayers())
             {

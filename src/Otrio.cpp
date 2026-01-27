@@ -71,4 +71,21 @@ void Otrio::removePlayer(Player *player)
 void Otrio::changeGameMode(OtrioGameMode mode)
 {
     this->gameMode = mode;
+    if (this->gameMode == TWO_PLAYER)
+    {
+        while (this->players.size() > 2)
+        {
+            this->players.pop_back();
+        }
+    }
+}
+
+OtrioGameMode Otrio::getGameMode() const
+{
+    return this->gameMode;
+}
+
+std::vector<CircleColor> Otrio::getAvailableCircleColor() const
+{
+    return this->availableColors;
 }

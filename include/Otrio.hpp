@@ -36,6 +36,12 @@ public:
      */
     std::vector<Player *> &getPlayers();
     /**
+     * @brief Get the available Circle Color List
+     *
+     * @return std::vector<CircleColor>&
+     */
+    std::vector<CircleColor> getAvailableCircleColor() const;
+    /**
      * @brief Add new player if possible
      * @throw std::invalid_argument
      *
@@ -55,4 +61,10 @@ public:
      * @param[in] mode New Game Mode
      */
     void changeGameMode(OtrioGameMode mode);
+    /**
+     * @brief Get the Game Mode
+     *
+     * @return OtrioGameMode
+     */
+    OtrioGameMode getGameMode() const;
 };
