@@ -3,7 +3,8 @@
 #include "ANSI.hpp"
 #include "Frame.hpp"
 
-// Utils
+/* Utils -------------------------------------------------------------------- */
+
 static std::string getAnsiCodeFromCircleColor(CircleColor color);
 static std::string concatFrameStringArray(std::array<std::string, 5> stringArray);
 
@@ -83,32 +84,36 @@ bool Frame::tryToPlace(CircleColor color, CircleSize size)
 
     return false;
 }
-
 std::string Frame::toString() const
 {
-    std::array<std::string, 5> frame_str_array = {" ", " ", " ", " ", " "};
+    // Initialize array with spaces for each layer (large, medium, small, medium, large)
+    std::array<std::string, 5> frameStrArray = {" ", " ", " ", " ", " "};
 
+    // Add large circle brackets if present
     if (this->largeCircle != nullptr)
     {
-        std::string circle_ansi_color = getAnsiCodeFromCircleColor(this->largeCircle->getColor());
-        frame_str_array[0] = circle_ansi_color + "(";
-        frame_str_array[4] = circle_ansi_color + ")";
+        std::string circleAnsiColor = getAnsiCodeFromCircleColor(this->largeCircle->getColor());
+        frameStrArray[0] = circleAnsiColor + "(";
+        frameStrArray[4] = circleAnsiColor + ")";
     }
 
+    // Add medium circle brackets if present
     if (this->mediumCircle != nullptr)
     {
-        std::string circle_ansi_color = getAnsiCodeFromCircleColor(this->mediumCircle->getColor());
-        frame_str_array[1] = circle_ansi_color + "(";
-        frame_str_array[3] = circle_ansi_color + ")";
+        std::string circleAnsiColor = getAnsiCodeFromCircleColor(this->mediumCircle->getColor());
+        frameStrArray[1] = circleAnsiColor + "(";
+        frameStrArray[3] = circleAnsiColor + ")";
     }
 
+    // Add small circle symbol if present
     if (this->smallCircle != nullptr)
     {
-        std::string circle_ansi_color = getAnsiCodeFromCircleColor(this->smallCircle->getColor());
-        frame_str_array[2] = circle_ansi_color + "o";
+        std::string circleAnsiColor = getAnsiCodeFromCircleColor(this->smallCircle->getColor());
+        frameStrArray[2] = circleAnsiColor + "o";
     }
 
-    return ANSI_BOLD + concatFrameStringArray(frame_str_array) + ANSI_RESET;
+    // Concatenate all elements and apply bold formatting
+    return ANSI_BOLD + concatFrameStringArray(frameStrArray) + ANSI_RESET;
 }
 
 /* Operators ---------------------------------------------------------------- */
@@ -158,11 +163,11 @@ static std::string getAnsiCodeFromCircleColor(CircleColor color)
 
 static std::string concatFrameStringArray(std::array<std::string, 5> stringArray)
 {
-    std::string frame_str;
+    std::string frameStr;
     for (size_t idx = 0; idx < stringArray.size(); idx++)
     {
-        frame_str += stringArray[idx];
+        frameStr += stringArray[idx];
     }
 
-    return frame_str;
+    return frameStr;
 }

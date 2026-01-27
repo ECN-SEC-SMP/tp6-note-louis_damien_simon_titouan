@@ -1,5 +1,7 @@
 #include "Circle.hpp"
 
+/* Constructors ------------------------------------------------------------- */
+
 Circle::Circle(CircleColor color, CircleSize size)
 {
     this->color = color;
@@ -7,6 +9,8 @@ Circle::Circle(CircleColor color, CircleSize size)
 }
 
 Circle::~Circle() = default;
+
+/* Getters ------------------------------------------------------------------ */
 
 CircleColor Circle::getColor() const
 {
