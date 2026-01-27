@@ -13,5 +13,5 @@ public:
     PlayerBot(CircleColor color, std::string name);
     ~PlayerBot();
 
-    void placeCircle(GameManager &gameManager) override;
+    std::pair<int, int> placeCircle(GameManager &gameManager) override;
 };
