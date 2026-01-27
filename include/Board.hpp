@@ -6,9 +6,9 @@
 
 struct BoardStyle_t
 {
-    std::string horizontal_wall = "-----";
-    std::string vertical_wall = "|";
-    std::string wall_node = "+";
+    std::string horizontalWall = "-----";
+    std::string verticalWall = "|";
+    std::string wallNode = "+";
 };
 
 class Board

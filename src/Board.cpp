@@ -22,17 +22,17 @@ std::string Board::toString() const
 
         for (int x = 0; x < BOARD_SIZE; x++)
         {
-            walls += this->boardStyle.wall_node;
-            walls += this->boardStyle.horizontal_wall;
+            walls += this->boardStyle.wallNode;
+            walls += this->boardStyle.horizontalWall;
 
-            contents += this->boardStyle.vertical_wall;
+            contents += this->boardStyle.verticalWall;
             contents += this->frames[x][y].toString();
 
             /* Right border */
             if (x == BOARD_SIZE - 1)
             {
-                walls += this->boardStyle.wall_node;
-                contents += this->boardStyle.vertical_wall;
+                walls += this->boardStyle.wallNode;
+                contents += this->boardStyle.verticalWall;
             }
         }
 
@@ -44,11 +44,11 @@ std::string Board::toString() const
     std::string walls;
     for (int x = 0; x < BOARD_SIZE; x++)
     {
-        walls += this->boardStyle.wall_node;
-        walls += this->boardStyle.horizontal_wall;
+        walls += this->boardStyle.wallNode;
+        walls += this->boardStyle.horizontalWall;
     }
     output_string += walls;
-    output_string += this->boardStyle.wall_node;
+    output_string += this->boardStyle.wallNode;
 
     return output_string;
 }

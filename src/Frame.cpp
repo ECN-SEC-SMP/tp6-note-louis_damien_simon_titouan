@@ -5,7 +5,7 @@
 
 // Utils
 static std::string getAnsiCodeFromCircleColor(CircleColor color);
-static std::string concatFrameStringArray(std::array<std::string, 5> string_array);
+static std::string concatFrameStringArray(std::array<std::string, 5> stringArray);
 
 /* Constructors ------------------------------------------------------------- */
 
@@ -156,12 +156,12 @@ static std::string getAnsiCodeFromCircleColor(CircleColor color)
     }
 }
 
-static std::string concatFrameStringArray(std::array<std::string, 5> string_array)
+static std::string concatFrameStringArray(std::array<std::string, 5> stringArray)
 {
     std::string frame_str;
-    for (size_t idx = 0; idx < string_array.size(); idx++)
+    for (size_t idx = 0; idx < stringArray.size(); idx++)
     {
-        frame_str += string_array[idx];
+        frame_str += stringArray[idx];
     }
 
     return frame_str;
