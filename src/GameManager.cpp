@@ -25,7 +25,7 @@ GameManager::GameManager(std::vector<Player*> &newPlayers): board(), roundCount(
     }
 }
 
-GameManager::~GameManager() {    // Free memory
+GameManager::~GameManager() {
 
     // Free memory
     for(int i = 0; i < 4; i++){
@@ -33,7 +33,7 @@ GameManager::~GameManager() {    // Free memory
         this->players[i] = nullptr;
     }
 }
-void GameManager::ManageGame(){
+void GameManager::manageGame(){
     // Try and Catch exceptions
     try {
         startGame();
@@ -45,7 +45,7 @@ void GameManager::ManageGame(){
 void GameManager::startGame(){  
     // Init everything
     choosePlayerOrder();
-    setRoundCount(0);    // Free memory
+    setRoundCount(0); 
 
 }
 
@@ -61,11 +61,10 @@ bool GameManager::playRound(){
     for(int i=0; i<4; i++){
         std::pair<int, int> position = this->players[i]->placeCircle(*this);
 
-        
+    
         if (checkWinConditions( position.first, position.second, this->players[i]->getColor())){
-            this->players[i]->getColor(),
             std::cout<<"bravo!!"<<std::endl;
-            // TODO: ending function
+            setWinner(this->players[i]);
             return true;
         }
     }
@@ -86,16 +85,19 @@ void GameManager::manageRounds(){
 bool GameManager::isLastRound() const{
     int round=getRoundCount();
     // Check the number of round
-    if(round==nbRound){
+    if(round==NBROUND){
         return true;
     }
-    else if(round<nbRound){
+    else if(round<NBROUND){
         return false;
     }
     else{
         // Raise exception if the roundcount is invalid
         throw std::range_error("Number of round is out of allowed range");  
     }
+}
+void GameManager::setWinner(Player * winner){
+    this->winnerPlayer=winner;
 }
 
 bool GameManager::checkWinConditions([[maybe_unused]] const int x, [[maybe_unused]] const int y, [[maybe_unused]] const CircleColor targetColor) const{

@@ -10,14 +10,14 @@
 #include <array>
 
 
-#define nbRound 27
+#define NBROUND 27
 class GameManager
 {
 protected :  
     Board board;
     std::array<Player *, 4> players;
     int roundCount;
-    
+    Player * winnerPlayer;
     
     public:
     // Check Win
@@ -28,7 +28,7 @@ protected :
 
 
     // Game turn management
-    void ManageGame();
+    void manageGame();
     void manageRounds();
     bool playRound();
 
@@ -43,7 +43,8 @@ protected :
     int getRoundCount() const;
     void setRoundCount(int roundCount);
     void incrementRoundCount(int n);
-    
+    void setWinner(Player * winner);
+
     // Game turn management
     void startGame();
 };

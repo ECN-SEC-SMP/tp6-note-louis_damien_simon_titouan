@@ -95,7 +95,7 @@ TEST(GameManagerTest, IsLastRoundReturnsFalse) {
 TEST(GameManagerTest, IsLastRoundReturnsTrue) {
     std::vector<Player*> playerPtrs = createPlayerPointers(4);
     GameManager gm(playerPtrs);
-    gm.setRoundCount(nbRound);
+    gm.setRoundCount(NBROUND);
     EXPECT_TRUE(gm.isLastRound());
 }
 
@@ -103,7 +103,7 @@ TEST(GameManagerTest, IsLastRoundReturnsTrue) {
 TEST(GameManagerTest, IsLastRoundThrowsException) {
     std::vector<Player*> playerPtrs = createPlayerPointers(4);
     GameManager gm(playerPtrs);
-    gm.setRoundCount(nbRound + 1);
+    gm.setRoundCount(NBROUND + 1);
     EXPECT_THROW(gm.isLastRound(), std::range_error);
 }
 
