@@ -4,7 +4,9 @@
 #include "Utils.hpp"
 
 Player::Player(CircleColor color, std::string name)
-    : color(color), name(name) {}
+    : color(color), name(name)
+{
+}
 
 Player::~Player() = default;
 
@@ -19,12 +21,12 @@ std::pair<int, int> Player::placeCircle(GameManager &gameManager)
         playerMenu.preventArguments();
 
         // Add available options
-        if (this->nbSmallCircles > 0)
-            playerMenu.addOption("Small (" + std::to_string(this->nbSmallCircles) + ")");
-        if (this->nbMediumCircles > 0)
-            playerMenu.addOption("Medium (" + std::to_string(this->nbMediumCircles) + ")");
-        if (this->nbLargeCircles > 0)
-            playerMenu.addOption("Large (" + std::to_string(this->nbLargeCircles) + ")");
+        if (this->inventory.nbSmallCircles > 0)
+            playerMenu.addOption("Small (" + std::to_string(this->inventory.nbSmallCircles) + ")");
+        if (this->inventory.nbMediumCircles > 0)
+            playerMenu.addOption("Medium (" + std::to_string(this->inventory.nbMediumCircles) + ")");
+        if (this->inventory.nbLargeCircles > 0)
+            playerMenu.addOption("Large (" + std::to_string(this->inventory.nbLargeCircles) + ")");
 
         // Get circle size choice
         int choice = playerMenu.run();
@@ -76,7 +78,7 @@ std::string Player::getName() const
     return this->name;
 }
 
-std::tuple<int, int, int> Player::getInventory() const
+PlayerInventory_t Player::getInventory() const
 {
-    return std::make_tuple(this->nbSmallCircles, this->nbMediumCircles, this->nbLargeCircles);
+    return this->inventory;
 }
