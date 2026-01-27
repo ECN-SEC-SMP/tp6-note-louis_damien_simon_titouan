@@ -7,11 +7,18 @@
 
 #define OTRIO_MAX_PLAYER 4
 
+enum OtrioGameMode
+{
+    TWO_PLAYER,
+    FOUR_PLAYER
+};
+
 class Otrio
 {
 private:
     std::vector<Player *> players;
     std::vector<CircleColor> availableColors;
+    OtrioGameMode gameMode;
 
 public:
     Otrio();
@@ -29,6 +36,12 @@ public:
      */
     std::vector<Player *> &getPlayers();
     /**
+     * @brief Get the available Circle Color List
+     *
+     * @return std::vector<CircleColor>&
+     */
+    std::vector<CircleColor> getAvailableCircleColor() const;
+    /**
      * @brief Add new player if possible
      * @throw std::invalid_argument
      *
@@ -42,4 +55,16 @@ public:
      * @param[in] playerName Player Name
      */
     void removePlayer(Player *player);
+    /**
+     * @brief Change new Game Mode
+     *
+     * @param[in] mode New Game Mode
+     */
+    void changeGameMode(OtrioGameMode mode);
+    /**
+     * @brief Get the Game Mode
+     *
+     * @return OtrioGameMode
+     */
+    OtrioGameMode getGameMode() const;
 };

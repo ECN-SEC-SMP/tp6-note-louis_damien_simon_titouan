@@ -1,9 +1,11 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 
 #include "ANSI.hpp"
 #include "Player.hpp"
+#include "Otrio.hpp"
 
 /// @brief Game banner to display above each windows
 #define GAME_ASCII_BANNER ANSI_BOLD ANSI_BLUE "\
@@ -70,38 +72,31 @@
 #define HORIZONTAL_BORDER "─"
 #define VERTICAL_BORDER "│"
 
-#define MOI_C_PO "\
- __  __       _          _           _       ____           _ \n\
-|  \\/  | ___ (_)     ___( ) ___  ___| |_    |  _ \\ ___     | |\n\
-| |\\/| |/ _ \\| |    / __|/ / _ \\/ __| __|   | |_) / _ \\    | |\n\
-| |  | | (_) | |   | (__  |  __/\\__ \\ |_    |  __/ (_) |   |_|\n\
-|_|  |_|\\___/|_|    \\___|  \\___||___/\\__|   |_|   \\___/    (_)\n\
- "
+////////////////////////////////////////////////////////////////////////////////
+//                                  Macros                                    //
+////////////////////////////////////////////////////////////////////////////////
+#define CONTINUE_ON_ENTER_PROMPT                            \
+  std::cin.clear();                                         \
+  std::cout << "Press [ENTER] to continue..." << std::endl; \
+  std::cin.ignore(100, '\n');
+#define key(str) ANSI_BLUE str ANSI_RESET
+#define red_word(str) ANSI_RED str ANSI_RESET
 
-#define PO ANSI_RED "\
-              .-\"-.                 \n\
-             ( (_) )                \n\
-              `. .'                 \n\
-               | |                  \n\
-           ..--\" \"--..              \n\
-         .' .-'\" \"`-. `.            \n\
-   .-.  / .'         `. \\  .-.      \n\
-   ||\\`/ /  __     __  \\ \\'/||      \n\
-   || `||  /(_|   |(_\\  ||' ||      \n\
-   \\  ||  `--'   `--'  ||  //       \n\
-    \\_\\ \\      Y      / /_//        \n\
-     `--`.`. `.-^-.' .'.'--'        \n\
-          > `-.`='.-' <             \n\
-        .'             `.           \n\
-         `-._________.-'            \n" ANSI_RESET
-
-namespace DisplayUtils
+namespace Render
 {
   /**
-   * @brief Get the Player List for display
+   * @brief Get the render of the Player List for display
    *
-   * @param players
+   * @param[in] players List of players
    * @return std::string
    */
-  std::string getStringFromPlayerList(std::vector<Player *> players);
-} // namespace DisplayUtils
+  std::string playerList(std::vector<Player *> players);
+
+  /**
+   * @brief Get the render of the Game Mode for display
+   *
+   * @param[in] mode Game Mode
+   * @return std::string
+   */
+  std::string gameMode(OtrioGameMode mode);
+} // namespace Render

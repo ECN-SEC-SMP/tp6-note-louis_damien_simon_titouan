@@ -1,6 +1,6 @@
 #include "DisplayUtils.hpp"
 
-std::string DisplayUtils::getStringFromPlayerList(std::vector<Player *> players)
+std::string Render::playerList(std::vector<Player *> players)
 {
     std::string output = ANSI_BOLD ANSI_UNDERLINE "Players:" ANSI_RESET_BOLD ANSI_RESET_UNDERLINE "\n";
     if (players.size() == 0)
@@ -13,4 +13,9 @@ std::string DisplayUtils::getStringFromPlayerList(std::vector<Player *> players)
     }
     output += ANSI_RESET;
     return output;
+}
+
+std::string Render::gameMode(OtrioGameMode mode)
+{
+    return (mode == TWO_PLAYER ? "2 players" : "4 players");
 }

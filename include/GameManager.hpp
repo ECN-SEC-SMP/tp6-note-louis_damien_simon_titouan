@@ -47,4 +47,8 @@ protected :
 
     // Game turn management
     void startGame();
+
+    // Getters
+    Board &getBoard();
+    Player *getWinner();
 };

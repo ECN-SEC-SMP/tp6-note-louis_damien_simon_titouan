@@ -7,6 +7,7 @@
 #include "MainMenuCallbacks.hpp"
 
 Otrio::Otrio()
+    : gameMode(FOUR_PLAYER)
 {
     this->availableColors.push_back(CircleColor::RED);
     this->availableColors.push_back(CircleColor::GREEN);
@@ -25,6 +26,7 @@ int Otrio::run()
                         .addOption("Remove Player", MainMenu::removePlayer_CBBuilder(*this))
                         //  .addOption("Stats", MainMenu::stats_CBBuilder(gm))
                         //  .addOption("Settings", MainMenu::settings_CBBuilder(gm))
+                        .addOption("Game Mode", MainMenu::gameMode_CBBuilder(*this))
                         .addOption("Help", MainMenu::CB_printHelp)
                         .addOption("Exit.", [&](int pos, Menu *m)
                                    { running = false; return false; })
@@ -33,8 +35,10 @@ int Otrio::run()
     int pos = 1;
     while (running)
     {
-        mainMenu.setTitle(GAME_ASCII_BANNER ANSI_BOLD "Main Menu\n\n" ANSI_RESET + DisplayUtils::getStringFromPlayerList(this->players)); // Actualize title
-        mainMenu.setOptionPos(pos);                                                                                                       // Keep last position
+        mainMenu.setTitle(GAME_ASCII_BANNER ANSI_BOLD "Main Menu (" +
+                          Render::gameMode(this->gameMode) + ")\n\n" ANSI_RESET +
+                          Render::playerList(this->players)); // Actualize title
+        mainMenu.setOptionPos(pos);                           // Keep last position
         pos = mainMenu.run();
     }
     return 0;
@@ -62,4 +66,26 @@ void Otrio::removePlayer(Player *player)
 
     this->availableColors.push_back(player->getColor());
     this->players.erase(std::find(this->players.begin(), this->players.end(), player));
+}
+
+void Otrio::changeGameMode(OtrioGameMode mode)
+{
+    this->gameMode = mode;
+    if (this->gameMode == TWO_PLAYER)
+    {
+        while (this->players.size() > 2)
+        {
+            this->players.pop_back();
+        }
+    }
+}
+
+OtrioGameMode Otrio::getGameMode() const
+{
+    return this->gameMode;
+}
+
+std::vector<CircleColor> Otrio::getAvailableCircleColor() const
+{
+    return this->availableColors;
 }

@@ -8,14 +8,19 @@
 // Avoid circular include
 class GameManager;
 
+typedef struct PlayerInventory_t
+{
+    int nbSmallCircles;
+    int nbMediumCircles;
+    int nbLargeCircles;
+} PlayerInventory_t;
+
 class Player
 {
 private:
     CircleColor color;
     std::string name;
-    int nbSmallCircles;
-    int nbMediumCircles;
-    int nbLargeCircles;
+    PlayerInventory_t inventory;
 
 public:
     /**
@@ -30,8 +35,10 @@ public:
      * @brief Prompt player and place his circle
      *
      * @param[inout] gameManager Reference of parent game manager instance
+     *
+     * @return std::pair<int, int> Coordinates of the placed circle
      */
-    void placeCircle(GameManager &gameManager);
+    virtual std::pair<int, int> placeCircle(GameManager &gameManager);
     /**
      * @brief Get the Player Color
      *
@@ -46,9 +53,8 @@ public:
     std::string getName() const;
     /**
      * @brief Get the Player Inventory
-     * @details nbSmallCircles, nbMediumCircles, nbLargeCircles
      *
-     * @return std::tuple<int, int, int>
+     * @return PlayerInventory_t
      */
-    std::tuple<int, int, int> getInventory() const;
+    PlayerInventory_t getInventory() const;
 };
