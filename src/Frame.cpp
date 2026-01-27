@@ -3,8 +3,11 @@
 #include "ANSI.hpp"
 #include "Frame.hpp"
 
+// Utils
 static std::string getAnsiCodeFromCircleColor(CircleColor color);
 static std::string concatFrameStringArray(std::array<std::string, 5> string_array);
+
+/* Constructors ------------------------------------------------------------- */
 
 Frame::Frame()
 {
@@ -13,7 +16,26 @@ Frame::Frame()
     this->largeCircle = nullptr;
 }
 
-Frame::~Frame() = default;
+Frame::Frame(const Frame &frameToCopy) : smallCircle(nullptr),
+                                         mediumCircle(nullptr),
+                                         largeCircle(nullptr)
+{
+    if (frameToCopy.smallCircle != nullptr)
+        this->smallCircle = new Circle(*frameToCopy.smallCircle);
+    if (frameToCopy.mediumCircle != nullptr)
+        this->mediumCircle = new Circle(*frameToCopy.mediumCircle);
+    if (frameToCopy.largeCircle != nullptr)
+        this->largeCircle = new Circle(*frameToCopy.largeCircle);
+}
+
+Frame::~Frame()
+{
+    delete this->smallCircle;
+    delete this->mediumCircle;
+    delete this->largeCircle;
+};
+
+/* Methods ------------------------------------------------------------------ */
 
 Circle *Frame::getCircle(CircleSize size)
 {
@@ -85,6 +107,33 @@ std::string Frame::toString() const
 
     return ANSI_BOLD + concatFrameStringArray(frame_str_array) + ANSI_RESET;
 }
+
+/* Operators ---------------------------------------------------------------- */
+
+Frame &Frame::operator=(const Frame &frame)
+{
+    if (this == &frame)
+        return *this;
+
+    delete this->smallCircle;
+    delete this->mediumCircle;
+    delete this->largeCircle;
+
+    this->smallCircle = nullptr;
+    this->mediumCircle = nullptr;
+    this->largeCircle = nullptr;
+
+    if (frame.smallCircle != nullptr)
+        this->smallCircle = new Circle(*frame.smallCircle);
+    if (frame.mediumCircle != nullptr)
+        this->mediumCircle = new Circle(*frame.mediumCircle);
+    if (frame.largeCircle != nullptr)
+        this->largeCircle = new Circle(*frame.largeCircle);
+
+    return *this;
+}
+
+/* Utils -------------------------------------------------------------------- */
 
 static std::string getAnsiCodeFromCircleColor(CircleColor color)
 {
