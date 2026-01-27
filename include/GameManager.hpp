@@ -33,4 +33,5 @@ public:
 
     // Getters
     Board &getBoard();
+    Player *getWinner();
 };
