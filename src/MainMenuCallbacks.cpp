@@ -5,16 +5,6 @@
 #include "Utils.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
-//                                  Macros                                    //
-////////////////////////////////////////////////////////////////////////////////
-#define CONTINUE_ON_ENTER_PROMPT                              \
-    std::cin.clear();                                         \
-    std::cout << "Press [ENTER] to continue..." << std::endl; \
-    std::cin.ignore(100, '\n');
-#define key(str) ANSI_BLUE str ANSI_RESET
-#define red_word(str) ANSI_RED str ANSI_RESET
-
-////////////////////////////////////////////////////////////////////////////////
 //                            MainMenu Functions                              //
 ////////////////////////////////////////////////////////////////////////////////
 bool MainMenu::CB_notImplementedYet(int pos, Menu *m)
@@ -45,33 +35,7 @@ Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &gm)
 {
     auto lambda_cb = [&](int pos, Menu *m)
     {
-        // if (gm.getPlayers().size() == 0)
-        // {
-        //     std::cout << "No players added!" << std::endl;
-        //     CONTINUE_ON_ENTER_PROMPT
-        // }
-        // else
-        // {
-        //     gm.setupRound();
-        //     gm.processPredictionsInputs();
-        //     gm.sortPlayersByPredictions();
-        //     int player_index = 0;
-        //     bool player_won = false;
-        //     do
-        //     {
-        //         if ((player_won = gm.playRound(player_index)) == true)
-        //             std::cout << ANSI_GREEN ANSI_BOLD "You WON!!" ANSI_RESET << std::endl;
-        //         else
-        //         {
-        //             std::cout << ANSI_RED ANSI_BOLD "You Lose!" ANSI_RESET << std::endl;
-        //             player_index++;
-        //         }
-        //         CONTINUE_ON_ENTER_PROMPT
-        //     } while (player_won == false && player_index < (int)gm.getPlayers().size());
-        //     Menu::clear();
-        //     std::cout << gm.displayBoard() << gm.displayRoundResults() << std::endl;
-        //     CONTINUE_ON_ENTER_PROMPT
-        // }
+        
 
         return false;
     };
@@ -153,24 +117,21 @@ Menu::MenuCallback_t MainMenu::removePlayer_CBBuilder(Otrio &gm)
     return lambda_cb;
 }
 
-Menu::MenuCallback_t MainMenu::stats_CBBuilder(Otrio &gm)
+Menu::MenuCallback_t MainMenu::gameMode_CBBuilder(Otrio &gm)
 {
     auto lambda_cb = [&](int pos, Menu *m)
     {
-        // Menu stats_menu = Menu(GAME_ASCII_BANNER + gm.displayScoreboard()).addOption("Reset all").addOption("Exit.").preventArguments();
-        // int index = stats_menu.run();
-        // if (index == 1)
-        // {
-        //     Menu confirmation_menu = Menu(GAME_ASCII_BANNER + gm.displayScoreboard() + "\nAre you sure?").addOption("yes").addOption("no").preventArguments();
-        //     int yn = confirmation_menu.run();
-        //     if (yn == 1)
-        //     {
-        //         for (auto &&p : gm.getPlayers())
-        //         {
-        //             p->reset();
-        //         }
-        //     }
-        // }
+        Menu gameModeMenu = Menu(GAME_ASCII_BANNER "Choose game mode").addOption("Two player mode").addOption("Four player mode").addOption("Cancel.").preventArguments();
+        int index = gameModeMenu.run();
+
+        if (index == 1)
+        {
+            gm.changeGameMode(TWO_PLAYER);
+        }
+        else if (index == 2)
+        {
+            gm.changeGameMode(FOUR_PLAYER);
+        }
 
         return false;
     };
