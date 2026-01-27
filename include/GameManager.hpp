@@ -2,31 +2,48 @@
 
 #include "Board.hpp"
 #include "Player.hpp"
+#include <vector>
+#include <stdexcept>
+#include <algorithm>
+#include <random>
+#include <iostream>
+#include <array>
 
+
+#define NBROUND 27
 class GameManager
 {
-private:
+protected :  
     Board board;
     std::array<Player *, 4> players;
     int roundCount;
-
-private:
+    Player * winnerPlayer;
+    
+    public:
     // Check Win
-    bool checkWinConditions(const Frame frame_played) const;
+    bool checkWinConditions(const int x, const int y, const CircleColor targetColor) const;
     bool checkWinCondition1(const Frame frame_played) const;
     bool checkWinCondition2(const Frame frame_played) const;
     bool checkWinCondition3(const Frame frame_played) const;
 
+
     // Game turn management
-    void playRound();
+    void manageGame();
+    void manageRounds();
+    bool playRound();
 
     // Tool function
     bool isLastRound() const;
-
-public:
+    void choosePlayerOrder();
     // Constructor and Destructor
-    GameManager(std::array<Player *, 4> players);
+    GameManager(std::vector<Player*> &newPlayers);
     ~GameManager();
+
+    //Getters and setters
+    int getRoundCount() const;
+    void setRoundCount(int roundCount);
+    void incrementRoundCount(int n);
+    void setWinner(Player * winner);
 
     // Game turn management
     void startGame();
