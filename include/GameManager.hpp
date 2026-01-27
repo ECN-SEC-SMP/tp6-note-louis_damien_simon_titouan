@@ -30,4 +30,7 @@ public:
 
     // Game turn management
     void startGame();
+
+    // Getters
+    Board &getBoard();
 };
