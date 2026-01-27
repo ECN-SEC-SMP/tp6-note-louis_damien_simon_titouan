@@ -82,6 +82,10 @@
 #define key(str) ANSI_BLUE str ANSI_RESET
 #define red_word(str) ANSI_RED str ANSI_RESET
 
+/**
+ * @namespace Render
+ * @brief Namespace containing utility functions for displaying game elements.
+ */
 namespace Render
 {
   /**
@@ -99,4 +103,36 @@ namespace Render
    * @return std::string
    */
   std::string gameMode(OtrioGameMode mode);
+
+  /**
+   * @brief Converts a Board object to its string representation.
+   *
+   * @param board The Board object to be converted into a displayable format.
+   * @return std::string A string representation of the board suitable for console output.
+   */
+  std::string board(Board board);
+
+  /**
+   * @brief Generates a formatted string representation of a player's inventory.
+   *
+   * This function creates a visual display of all items currently held by the specified player.
+   * The inventory is formatted as a string suitable for console output or display purposes.
+   *
+   * @param player A pointer to the Player object whose inventory is to be displayed.
+   *               The pointer must not be null.
+   *
+   * @return A std::string containing the formatted inventory display. This include the
+   *         player name, and string representation of the circles.
+   *
+   * @see Player
+   */
+  std::string playerInventory(Player *player);
+
+  /**
+   * @brief Generates a string representation of all players' inventories.
+   *
+   * @param players A vector of pointers to Player objects whose inventories should be displayed.
+   * @return std::string A formatted string containing all players' inventory information.
+   */
+  std::string playersInventory(std::vector<Player *> players);
 } // namespace Render
