@@ -20,7 +20,7 @@ std::pair<int, int> Player::placeCircle(GameManager &gameManager)
     while (!placed)
     {
         // Setup Menu
-        Menu playerMenu(GAME_ASCII_BANNER + gameManager.getBoard().toString() + "\n\n" ANSI_BOLD + this->name + " round: " ANSI_RESET "(select circle size)\n");
+        Menu playerMenu(GAME_ASCII_BANNER + gameManager.renderBoard() + "\n\n" ANSI_BOLD + this->name + " round: " ANSI_RESET "(select circle size)\n");
         playerMenu.preventArguments();
 
         // Add available options
@@ -75,10 +75,10 @@ std::pair<int, int> Player::placeCircle(GameManager &gameManager)
             this->inventory.nbSmallCircles--;
             break;
         case MEDIUM:
-            this->inventory.nbSmallCircles--;
+            this->inventory.nbMediumCircles--;
             break;
         case LARGE:
-            this->inventory.nbSmallCircles--;
+            this->inventory.nbLargeCircles--;
             break;
         default:
             break;
