@@ -6,6 +6,9 @@
 Player::Player(CircleColor color, std::string name)
     : color(color), name(name)
 {
+    this->inventory.nbSmallCircles = 3;
+    this->inventory.nbMediumCircles = 3;
+    this->inventory.nbLargeCircles = 3;
 }
 
 Player::~Player() = default;
@@ -17,7 +20,7 @@ std::pair<int, int> Player::placeCircle(GameManager &gameManager)
     while (!placed)
     {
         // Setup Menu
-        Menu playerMenu(GAME_ASCII_BANNER + this->name + " round: (select circle size)");
+        Menu playerMenu(GAME_ASCII_BANNER + gameManager.getBoard().toString() + "\n\n" ANSI_BOLD + this->name + " round: " ANSI_RESET "(select circle size)\n");
         playerMenu.preventArguments();
 
         // Add available options
@@ -37,16 +40,17 @@ std::pair<int, int> Player::placeCircle(GameManager &gameManager)
         std::cin >> input;
 
         // Check coordinates validity
-        if (!std::isalpha(input.at(0)) || !std::isdigit(input.at(1)))
+        if (input.size() < 2 || !std::isalpha(input.at(0)) || !std::isdigit(input.at(1)))
         {
             std::cout << ANSI_BOLD "Invalid coordinates." ANSI_RESET << std::endl;
             CONTINUE_ON_ENTER_PROMPT
             continue;
         }
+        std::cin.ignore(100, '\n'); // Wait until ENTER
 
         // Prepare and check real coordinates
         x = input.at(0) - 'A';
-        y = input.at(1) - 1;
+        y = input.at(1) - '0' - 1;
         if (x < 0 || x > 2 || y < 0 || y > 2)
         {
             std::cout << ANSI_BOLD "Coordinates out of range." ANSI_RESET << std::endl;
@@ -62,6 +66,22 @@ std::pair<int, int> Player::placeCircle(GameManager &gameManager)
             std::cout << ANSI_BOLD "Cannot place this circle here." ANSI_RESET << std::endl;
             CONTINUE_ON_ENTER_PROMPT
             continue;
+        }
+
+        // Decrement inventory
+        switch (size)
+        {
+        case SMALL:
+            this->inventory.nbSmallCircles--;
+            break;
+        case MEDIUM:
+            this->inventory.nbSmallCircles--;
+            break;
+        case LARGE:
+            this->inventory.nbSmallCircles--;
+            break;
+        default:
+            break;
         }
     }
     // Return coordinates of the placed circle
