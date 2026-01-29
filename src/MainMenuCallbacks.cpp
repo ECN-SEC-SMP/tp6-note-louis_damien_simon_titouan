@@ -52,7 +52,7 @@ Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &otrio)
             // Add all available players
             for (auto &&p : otrio.getPlayers())
             {
-                real_players[i] = p;
+                real_players[i] = new Player(p->getColor(), p->getName());
                 i++;
             }
             // If players list is not full, add bots to complete
@@ -73,7 +73,7 @@ Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &otrio)
             // Add all available players
             for (auto &&p : otrio.getPlayers())
             {
-                real_players[i] = p;
+                real_players[i] = new Player(p->getColor(), p->getName());
                 real_players[i + 2] = new Player(availableColor.back(), p->getName());
                 availableColor.pop_back();
                 i++;
