@@ -60,6 +60,7 @@ void GameManager::startGame()
     // Init everything
     choosePlayerOrder();
     setRoundCount(0);
+    manageRounds();
 }
 
 Board &GameManager::getBoard()
