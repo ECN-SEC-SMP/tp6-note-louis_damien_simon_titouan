@@ -1,6 +1,8 @@
 #include <stdexcept>
 #include "Board.hpp"
 
+#define ROW_LABEL_MARGIN "  "
+
 /* Constructors ------------------------------------------------------------- */
 
 Board::Board() = default;
@@ -19,17 +21,33 @@ std::array<std::array<Frame, 3>, 3> &Board::getFrames()
 std::string Board::toString() const
 {
     std::string outputString;
+    std::string rowLabels[BOARD_SIZE] = {"A", "B", "C"};
 
-    /* Iterate line by line */
+    /* Add column labels to output string */
+    outputString += ROW_LABEL_MARGIN;
+    for (int x = 0; x < BOARD_SIZE; x++)
+    {
+        outputString += "   ";                 // center label
+        outputString += std::to_string(x + 1); // start from 1 instead of 0
+        outputString += "  ";                  // fill until next wall
+    }
+    outputString += "\n";
+
+    /* Iterate over board rows (top to bottom) */
     for (int y = 0; y < BOARD_SIZE; y++)
     {
         /* For each line, create two strings:
             - walls: it contains the top walls of the line (horizontal walls)
-            - contents: it contains the vertical walls and the frames content
+            - contents: it contains the vertical walls, the frames content and the row labels
         */
         std::string walls = "";
         std::string contents = "";
 
+        /* Add row label */
+        walls += ROW_LABEL_MARGIN;
+        contents += rowLabels[y] + " ";
+
+        /* Iterate over columns (left to right) */
         for (int x = 0; x < BOARD_SIZE; x++)
         {
             /* For each frame, add strings for:
@@ -62,7 +80,7 @@ std::string Board::toString() const
     }
 
     /* Bottom border */
-    std::string walls;
+    std::string walls = ROW_LABEL_MARGIN;
     for (int x = 0; x < BOARD_SIZE; x++)
     {
         walls += this->computeWallNode(x, BOARD_SIZE);
