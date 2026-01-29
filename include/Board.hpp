@@ -64,6 +64,15 @@ public:
     std::array<std::array<Frame, 3>, 3> &getFrames();
 
     /**
+     * @brief Retrieves a frame from the coordonates.
+     *
+     * @return A frame
+     */
+    const Frame& getFrame(int x, int y) const;
+
+    Frame& getFrame(int x, int y);
+
+    /**
      * @brief Generates a string representation of the board.
      *
      * Creates a formatted string that displays the current state of the board,

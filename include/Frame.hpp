@@ -50,7 +50,9 @@ public:
      * @param size The CircleSize specifying which circle to retrieve
      * @return Circle* Pointer to the requested circle, or nullptr if not found
      */
-    Circle *getCircle(CircleSize size);
+    Circle *getCircle(CircleSize size) const;
+
+    void removeCircle(CircleColor c, CircleSize s);
 
     /**
      * @brief Attempts to place a circle on the frame

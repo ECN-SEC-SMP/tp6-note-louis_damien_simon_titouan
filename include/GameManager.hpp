@@ -1,15 +1,20 @@
 #pragma once
 
+#include <random>    
+#include <algorithm> 
+#include <iostream>  
 #include "Board.hpp"
-#include "Player.hpp"
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <random>
-#include <iostream>
+#include <string>
 #include <array>
 
+
+class Player; 
+enum CircleColor; 
+
+
 #define NBROUND 27
+
 class GameManager
 {
 protected:
@@ -20,10 +25,10 @@ protected:
 
 public:
     // Check Win
-    bool checkWinConditions(const int x, const int y, const CircleColor targetColor) const;
-    bool checkWinCondition1(const Frame frame_played) const;
-    bool checkWinCondition2(const Frame frame_played) const;
-    bool checkWinCondition3(const Frame frame_played) const;
+    bool checkWinConditions(const int x, const int y, const CircleColor targetColor, const Board* sourceBoard) const;
+    bool checkWinCondition1(const int x, const int y, const CircleColor targetColor, const Board* sourceBoard) const;
+    bool checkWinCondition2(const int x, const int y, const CircleColor targetColor, const Board* sourceBoard) const;
+    bool checkWinCondition3(const int x, const int y, const CircleColor targetColor, const Board* sourceBoard) const;
 
     // Game turn management
     void manageGame();
@@ -46,6 +51,7 @@ public:
     void incrementRoundCount(int n);
     Player *getWinner();
     void setWinner(Player *winner);
+    std::array<Player *, 4> getPlayers() const;
 
     // Game turn management
     void startGame();
