@@ -9,9 +9,8 @@
 
 struct BoardStyle_t
 {
-    std::string horizontalWall = HORIZONTAL_WALL_SIMPLE;
-    std::string verticalWall = VERTICAL_WALL_SIMPLE;
-    std::string wallNode = NODE_MIDDLE_SIMPLE;
+    std::string horizontalSeparator = HORIZONTAL_SEPARATOR_SIMPLE;
+    std::string verticalSeparator = VERTICAL_SEPARATOR_SIMPLE;
 
     std::string node_middle = NODE_MIDDLE_SIMPLE;
     std::string node_horizontal = NODE_HORIZONTAL_SIMPLE;
@@ -52,7 +51,7 @@ private:
      *
      * This member variable stores the current style configuration for the board's appearance
      * and rendering. It determines how the board is displayed to the player.
-     * It contains the characters used for horizontal and vertical walls, and wall nodes.
+     * It contains the characters used for horizontal and vertical separators, and grid nodes.
      */
     BoardStyle_t boardStyle;
 
@@ -70,14 +69,14 @@ private:
     int axisIndexFromCoord(int coord) const;
 
     /**
-     * @brief Computes the wall node representation at the specified coordinates.
+     * @brief Computes the grid node representation at the specified coordinates.
      *
      * @param x The x-coordinate of the position on the board.
      * @param y The y-coordinate of the position on the board.
      *
-     * @return std::string The string representation of the wall node at position (x, y).
+     * @return std::string The string representation of the grid node at position (x, y).
      */
-    std::string computeWallNode(int x, int y) const;
+    std::string computeGridNode(int x, int y) const;
 
 public:
     /**

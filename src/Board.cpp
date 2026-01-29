@@ -29,7 +29,7 @@ std::string Board::toString() const
     {
         outputString += "   ";                 // center label
         outputString += std::to_string(x + 1); // start from 1 instead of 0
-        outputString += "  ";                  // fill until next wall
+        outputString += "  ";                  // fill until next separator
     }
     outputString += "\n";
 
@@ -37,61 +37,61 @@ std::string Board::toString() const
     for (int y = 0; y < BOARD_SIZE; y++)
     {
         /* For each line, create two strings:
-            - walls: it contains the top walls of the line (horizontal walls)
-            - contents: it contains the vertical walls, the frames content and the row labels
+            - separators: it contains the top separators of the line (horizontal separators)
+            - contents: it contains the vertical separators, the frames content and the row labels
         */
-        std::string walls = "";
+        std::string separators = "";
         std::string contents = "";
 
         /* Add row label */
-        walls += ROW_LABEL_MARGIN;
+        separators += ROW_LABEL_MARGIN;
         contents += rowLabels[y] + " ";
 
         /* Iterate over columns (left to right) */
         for (int x = 0; x < BOARD_SIZE; x++)
         {
             /* For each frame, add strings for:
-                - top wall and top left corner (walls):
+                - top separator and top left corner (separators):
                     ╔═════+
                     ¦     ¦
                     +-----+
-                - left wall and content of the frame (contents):
+                - left separator and content of the frame (contents):
                     +-----+
                     ║XXXXX¦
                     +-----+
             */
-            walls += this->computeWallNode(x, y);
-            walls += this->boardStyle.horizontalWall;
+            separators += this->computeGridNode(x, y);
+            separators += this->boardStyle.horizontalSeparator;
 
-            contents += this->boardStyle.verticalWall;
+            contents += this->boardStyle.verticalSeparator;
             contents += this->frames[x][y].toString();
 
             /* Right border */
             if (x == BOARD_SIZE - 1)
             {
-                walls += this->computeWallNode(x + 1, y);
-                contents += this->boardStyle.verticalWall;
+                separators += this->computeGridNode(x + 1, y);
+                contents += this->boardStyle.verticalSeparator;
             }
         }
 
-        /* Add frame top wall and frame content to output string */
-        outputString += walls + "\n";
+        /* Add frame top separator and frame content to output string */
+        outputString += separators + "\n";
         outputString += contents + "\n";
     }
 
     /* Bottom border */
-    std::string walls = ROW_LABEL_MARGIN;
+    std::string separators = ROW_LABEL_MARGIN;
     for (int x = 0; x < BOARD_SIZE; x++)
     {
-        walls += this->computeWallNode(x, BOARD_SIZE);
-        walls += this->boardStyle.horizontalWall;
+        separators += this->computeGridNode(x, BOARD_SIZE);
+        separators += this->boardStyle.horizontalSeparator;
     }
 
     /* Bottom right corner */
-    walls += this->computeWallNode(BOARD_SIZE, BOARD_SIZE);
+    separators += this->computeGridNode(BOARD_SIZE, BOARD_SIZE);
 
     /* Add bottom border */
-    outputString += walls + "\n";
+    outputString += separators + "\n";
 
     return outputString;
 }
@@ -113,7 +113,7 @@ int Board::axisIndexFromCoord(int coord) const
         throw std::invalid_argument("coord must be in the range {0," + std::to_string(BOARD_SIZE) + "}");
 }
 
-std::string Board::computeWallNode(int x, int y) const
+std::string Board::computeGridNode(int x, int y) const
 {
     int xIndex = this->axisIndexFromCoord(x);
     int yIndex = this->axisIndexFromCoord(y);

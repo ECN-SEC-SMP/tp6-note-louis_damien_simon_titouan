@@ -2,11 +2,11 @@
 
 /* Board ==================================================================== */
 /* DOUBLE ------------------------------------------------------------------- */
-/* Walls */
-#define HORIZONTAL_WALL_DOUBLE "═════"
-#define VERTICAL_WALL_DOUBLE "║"
+/* Separators */
+#define HORIZONTAL_SEPARATOR_DOUBLE "═════"
+#define VERTICAL_SEPARATOR_DOUBLE "║"
 
-/* Wall nodes */
+/* Grid nodes */
 #define NODE_MIDDLE_DOUBLE "╬"
 #define NODE_HORIZONTAL_DOUBLE "═"
 #define NODE_VERTICAL_DOUBLE "║"
@@ -22,11 +22,11 @@
 #define NODE_BOTTOM_RIGHT_DOUBLE "╝"
 
 /* SIMPLE ------------------------------------------------------------------- */
-/* Walls */
-#define HORIZONTAL_WALL_SIMPLE "─────"
-#define VERTICAL_WALL_SIMPLE "│"
+/* Separators */
+#define HORIZONTAL_SEPARATOR_SIMPLE "─────"
+#define VERTICAL_SEPARATOR_SIMPLE "│"
 
-/* Wall nodes */
+/* Grid nodes */
 #define NODE_MIDDLE_SIMPLE "┼"
 #define NODE_HORIZONTAL_SIMPLE "─"
 #define NODE_VERTICAL_SIMPLE "│"
