@@ -6,6 +6,7 @@
 #include "ANSI.hpp"
 #include "Player.hpp"
 #include "Otrio.hpp"
+#include "Board.hpp"
 
 /// @brief Game banner to display above each windows
 #define GAME_ASCII_BANNER ANSI_BOLD ANSI_BLUE "\
@@ -15,62 +16,6 @@
 | |_| | |_| |  | | (_) |\n\
  \\___/ \\__|_|  |_|\\___/ \n\
     " ANSI_RESET_BOLD ANSI_ITALIC ANSI_UNDERLINE "By Les Quadruples Montres\n\n" ANSI_RESET
-
-/* Board ==================================================================== */
-/* Grid */
-#define NODE "┼"
-#define HORIZONTAL_GRID "────"
-#define VERTICAL_GRID "│"
-
-/* DOUBLE_WALLS ------------------------------------------------------------- */
-/* Walls */
-#define HORIZONTAL_WALL_DOUBLE "════"
-#define VERTICAL_WALL_DOUBLE "║"
-
-/* Wall nodes */
-#define NODE_MIDDLE_DOUBLE "╬"
-#define NODE_HORIZONTAL_DOUBLE "═"
-#define NODE_VERTICAL_DOUBLE "║"
-
-#define NODE_TOP_DOUBLE "╦"
-#define NODE_LEFT_DOUBLE "╠"
-#define NODE_RIGHT_DOUBLE "╣"
-#define NODE_BOTTOM_DOUBLE "╩"
-
-#define NODE_TOP_LEFT_DOUBLE "╔"
-#define NODE_TOP_RIGHT_DOUBLE "╗"
-#define NODE_BOTTOM_LEFT_DOUBLE "╚"
-#define NODE_BOTTOM_RIGHT_DOUBLE "╝"
-
-/* SIMPLE_WALLS ------------------------------------------------------------- */
-/* Walls */
-#define HORIZONTAL_WALL_SIMPLE "────"
-#define VERTICAL_WALL_SIMPLE "│"
-
-/* Wall nodes */
-#define NODE_MIDDLE_SIMPLE "┼"
-#define NODE_HORIZONTAL_SIMPLE "─"
-#define NODE_VERTICAL_SIMPLE "│"
-
-#define NODE_TOP_SIMPLE "┬"
-#define NODE_LEFT_SIMPLE "├"
-#define NODE_RIGHT_SIMPLE "┤"
-#define NODE_BOTTOM_SIMPLE "┴"
-
-#define NODE_TOP_LEFT_SIMPLE "┌"
-#define NODE_TOP_RIGHT_SIMPLE "┐"
-#define NODE_BOTTOM_LEFT_SIMPLE "└"
-#define NODE_BOTTOM_RIGHT_SIMPLE "┘"
-
-#define EMPTY_FRAME "    "
-
-/* Scoreboard =============================================================== */
-#define TOP_LEFT_CORNER "┌"
-#define TOP_RIGHT_CORNER "┐"
-#define BOTTOM_LEFT_CORNER "└"
-#define BOTTOM_RIGHT_CORNER "┘"
-#define HORIZONTAL_BORDER "─"
-#define VERTICAL_BORDER "│"
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                  Macros                                    //
@@ -110,7 +55,7 @@ namespace Render
    * @param board The Board object to be converted into a displayable format.
    * @return std::string A string representation of the board suitable for console output.
    */
-  std::string board(Board board);
+  std::string board(const Board &board);
 
   /**
    * @brief Generates a formatted string representation of a player's inventory.
