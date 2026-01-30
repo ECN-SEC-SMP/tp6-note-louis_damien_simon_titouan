@@ -21,15 +21,16 @@ std::array<std::array<Frame, 3>, 3> &Board::getFrames()
 std::string Board::toString() const
 {
     std::string outputString;
-    std::string rowLabels[BOARD_SIZE] = {"A", "B", "C"};
+    std::string rowLabels[BOARD_SIZE] = {"1", "2", "3"};
+    std::string columnLabels[BOARD_SIZE] = {"A", "B", "C"};
 
     /* Add column labels to output string */
     outputString += ROW_LABEL_MARGIN;
-    for (int x = 0; x < BOARD_SIZE; x++)
+    for (int columnIdx = 0; columnIdx < BOARD_SIZE; columnIdx++)
     {
-        outputString += "   ";                 // center label
-        outputString += std::to_string(x + 1); // start from 1 instead of 0
-        outputString += "  ";                  // fill until next separator
+        outputString += "   "; // center label
+        outputString += columnLabels[columnIdx];
+        outputString += "  "; // fill until next separator
     }
     outputString += "\n";
 
