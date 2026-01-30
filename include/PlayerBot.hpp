@@ -22,7 +22,13 @@ public:
     // Implémentation de la fonction virtuelle pure de la classe Player
     std::pair<int, int> placeCircle(GameManager &gameManager) override;
 
-    // Fonction d'évaluation pour l'IA (récursivité)
+    // Actualise l inventory du player
+    void setInventory(PlayerInventory_t newInv);
+
+    //Remove un circle de son inventaire lorsque le bot le place
+    void removeCircle(CircleSize size);
+
+    // Fonction d'évaluation 
     int evaluateRecursive(Board &simBoard, PlayerInventory_t simInv, int depth, GameManager &gm, CircleColor myColor);
 
 };

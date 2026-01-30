@@ -20,6 +20,9 @@ class Player
 private:
     CircleColor color;
     std::string name;
+
+protected:
+
     PlayerInventory_t inventory;
 
 public:

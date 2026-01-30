@@ -35,6 +35,18 @@ PlayerInventory_t subPiece(PlayerInventory_t inv, CircleSize s)
     return inv;
 }
 
+void PlayerBot::setInventory(PlayerInventory_t newInv) {
+    this->inventory = newInv; 
+}
+
+void PlayerBot::removeCircle(CircleSize s){
+    PlayerInventory_t myInv = this->getInventory();
+    if (s == SMALL) myInv.nbSmallCircles--;
+    else if (s == MEDIUM) myInv.nbMediumCircles--;
+    else if (s == LARGE) myInv.nbLargeCircles--;
+    this->setInventory(myInv); 
+}
+
 // Fonction d'évaluation récursive sur des copies
 int PlayerBot::evaluateRecursive(Board &simBoard, PlayerInventory_t simInv, int depth, GameManager &gm, CircleColor myColor)
 {
@@ -99,8 +111,10 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
                     if (gameManager.checkWinCondition1(x, y, color, &gameManager.getBoard()))
                     {
                         // On gagne direct
-                        gameManager.getBoard().getFrame(x, y).tryToPlace(color, s);
-                        return {x, y};
+                        if(gameManager.getBoard().getFrame(x, y).tryToPlace(color, s)){
+                            removeCircle(s);
+                            return {x, y};
+                        }
                     }
                 }
             }
@@ -132,16 +146,19 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
                     if (hasPiece(oppInv, s) && gameManager.getBoard().getFrame(x, y).getCircle(s) == nullptr)
                     {
                         // On demande si poser ce circle aux coordonnees x,y fait gagner l'opponent
-                        if (gameManager.checkWinCondition1(x, y, opponent->getColor(), &gameManager.getBoard()))
+                        if (gameManager.checkWinConditions(x, y, opponent->getColor(), &gameManager.getBoard()))
                         {
                             // Si oui
+                            std::cout << "Menace detectee en " << x << "," << y << std::endl;
                             for (CircleSize myS : SIZES)
                             {
                                 if (hasPiece(myInv, myS) && gameManager.getBoard().getFrame(x, y).getCircle(myS) == nullptr)
                                 {
                                     // On place NOTRE pièce pour bloquer
-                                    gameManager.getBoard().getFrame(x, y).tryToPlace(color, myS);
-                                    return {x, y};
+                                    if(gameManager.getBoard().getFrame(x, y).tryToPlace(color, myS)){
+                                        removeCircle(myS);
+                                        return {x, y};
+                                    }
                                 }
                             }
                         }
@@ -187,6 +204,7 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
     {
         if (gameManager.getBoard().getFrame(bestMove.x, bestMove.y).tryToPlace(color, bestMove.size))
         {
+            removeCircle(bestMove.size);
             return {bestMove.x, bestMove.y};
         }
     }
@@ -196,8 +214,10 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
     // On check le centre d'abord car comme au morpion ca semble plus strategique
     if (hasPiece(myInv, MEDIUM) && gameManager.getBoard().getFrame(1, 1).getCircle(MEDIUM) == nullptr)
     {
-        if (gameManager.getBoard().getFrame(1, 1).tryToPlace(color, MEDIUM))
+        if (gameManager.getBoard().getFrame(1, 1).tryToPlace(color, MEDIUM)){
+            removeCircle(MEDIUM);
             return {1, 1};
+        }
     }
 
     // Premier coup legal qui reste
@@ -211,6 +231,7 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
                 {
                     if (gameManager.getBoard().getFrame(x, y).tryToPlace(color, s))
                     {
+                        removeCircle(s);
                         return {x, y};
                     }
                 }
