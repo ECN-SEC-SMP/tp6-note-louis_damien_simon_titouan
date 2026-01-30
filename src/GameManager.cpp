@@ -364,10 +364,14 @@ bool GameManager::checkWinCondition3(const int x, const int y, const CircleColor
     Circle *medium = b.getFrame(x, y).getCircle(MEDIUM);
     Circle *large = b.getFrame(x, y).getCircle(LARGE);
 
-    if (small == nullptr || medium == nullptr || large == nullptr)
-    {
-        return false;
+    if (small != nullptr && medium != nullptr && large != nullptr) {
+        if (small->getColor() == targetColor && 
+            medium->getColor() == targetColor && 
+            large->getColor() == targetColor) {
+            return true;
+        }
     }
+    return false;
 
 }
 

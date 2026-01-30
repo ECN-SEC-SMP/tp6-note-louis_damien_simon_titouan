@@ -1,14 +1,14 @@
-#include "PlayerBot.hpp"   
-#include "Board.hpp"       
-#include "GameManager.hpp" 
-#include "Frame.hpp"       
+#include "PlayerBot.hpp"
+#include "Board.hpp"
+#include "GameManager.hpp"
+#include "Frame.hpp"
 #include <vector>
 #include <algorithm>
 
 const std::vector<CircleSize> SIZES = {SMALL, MEDIUM, LARGE};
 
-PlayerBot::PlayerBot(CircleColor color, std::string name) 
-    : Player(color, name) 
+PlayerBot::PlayerBot(CircleColor color, std::string name)
+    : Player(color, name)
 {
 }
 
@@ -29,22 +29,30 @@ bool hasPiece(PlayerInventory_t inv, CircleSize s)
 // Utilitaire pour retirer une pièce d'un inventaire simulé
 PlayerInventory_t subPiece(PlayerInventory_t inv, CircleSize s)
 {
-    if (s == SMALL) inv.nbSmallCircles--;
-    else if (s == MEDIUM) inv.nbMediumCircles--;
-    else if (s == LARGE) inv.nbLargeCircles--;
+    if (s == SMALL)
+        inv.nbSmallCircles--;
+    else if (s == MEDIUM)
+        inv.nbMediumCircles--;
+    else if (s == LARGE)
+        inv.nbLargeCircles--;
     return inv;
 }
 
-void PlayerBot::setInventory(PlayerInventory_t newInv) {
-    this->inventory = newInv; 
+void PlayerBot::setInventory(PlayerInventory_t newInv)
+{
+    this->inventory = newInv;
 }
 
-void PlayerBot::removeCircle(CircleSize s){
+void PlayerBot::removeCircle(CircleSize s)
+{
     PlayerInventory_t myInv = this->getInventory();
-    if (s == SMALL) myInv.nbSmallCircles--;
-    else if (s == MEDIUM) myInv.nbMediumCircles--;
-    else if (s == LARGE) myInv.nbLargeCircles--;
-    this->setInventory(myInv); 
+    if (s == SMALL)
+        myInv.nbSmallCircles--;
+    else if (s == MEDIUM)
+        myInv.nbMediumCircles--;
+    else if (s == LARGE)
+        myInv.nbLargeCircles--;
+    this->setInventory(myInv);
 }
 
 // Fonction d'évaluation récursive sur des copies
@@ -53,7 +61,8 @@ int PlayerBot::evaluateRecursive(Board &simBoard, PlayerInventory_t simInv, int 
     int maxScore = 0;
 
     // Condition d'arrêt : on a atteint la profondeur max
-    if (depth == 0) return 0;
+    if (depth == 0)
+        return 0;
 
     // On parcourt toutes les cases pour simuler NOTRE prochain coup
     for (int x = 0; x < 3; x++)
@@ -69,20 +78,20 @@ int PlayerBot::evaluateRecursive(Board &simBoard, PlayerInventory_t simInv, int 
                     if (gm.checkWinConditions(x, y, myColor, &simBoard))
                     {
                         // On donne un gros score, plus élevé si la victoire est proche
-                        return 100 * depth; 
+                        return 100 * depth;
                     }
 
                     // Sinon, on simule la pose et on descend plus profondément
-                    if (depth > 1) 
+                    if (depth > 1)
                     {
                         simBoard.getFrame(x, y).tryToPlace(myColor, s);
-                        
+
                         // Appel récursif avec l'inventaire mis à jour
                         int score = evaluateRecursive(simBoard, subPiece(simInv, s), depth - 1, gm, myColor);
-                        
+
                         // On nettoie la simulation
                         simBoard.getFrame(x, y).removeCircle(myColor, s);
-                        
+
                         maxScore = std::max(maxScore, score);
                     }
                 }
@@ -111,7 +120,8 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
                     if (gameManager.checkWinCondition1(x, y, color, &gameManager.getBoard()))
                     {
                         // On gagne direct
-                        if(gameManager.getBoard().getFrame(x, y).tryToPlace(color, s)){
+                        if (gameManager.getBoard().getFrame(x, y).tryToPlace(color, s))
+                        {
                             removeCircle(s);
                             return {x, y};
                         }
@@ -123,17 +133,15 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
 
     // 2. DANGER IMMÉDIAT
 
+    // 2. DANGER IMMÉDIAT
     auto players = gameManager.getPlayers();
 
     for (auto &opponent : players)
     {
-        // On enleve notre couleur
+        // On ignore notre propre couleur
         if (opponent->getColor() == color)
-        {
             continue;
-        }
 
-        // On recupere les mains de chaque joueur adverse
         PlayerInventory_t oppInv = opponent->getInventory();
 
         for (int x = 0; x < 3; x++)
@@ -142,22 +150,31 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
             {
                 for (CircleSize s : SIZES)
                 {
-                    // si l'opponent a la case a placer
+                    // 1. On vérifie si l'adversaire possède la pièce ET si l'emplacement est libre pour CETTE taille
                     if (hasPiece(oppInv, s) && gameManager.getBoard().getFrame(x, y).getCircle(s) == nullptr)
                     {
-                        // On demande si poser ce circle aux coordonnees x,y fait gagner l'opponent
-                        if (gameManager.checkWinConditions(x, y, opponent->getColor(), &gameManager.getBoard()))
+                        // On pose virtuellement la pièce de l'adversaire
+                        if (gameManager.getBoard().getFrame(x, y).tryToPlace(opponent->getColor(), s))
                         {
-                            // Si oui
-                            std::cout << "Menace detectee en " << x << "," << y << std::endl;
-                            for (CircleSize myS : SIZES)
+                            // On vérifie si cette pose le fait gagner
+                            bool opponentWins = gameManager.checkWinConditions(x, y, opponent->getColor(), &gameManager.getBoard());
+
+                            // NETTOYAGE (On retire la pièce virtuelle)
+                            gameManager.getBoard().getFrame(x, y).removeCircle(opponent->getColor(), s);
+
+                            if (opponentWins)
                             {
-                                if (hasPiece(myInv, myS) && gameManager.getBoard().getFrame(x, y).getCircle(myS) == nullptr)
+                                // 2. On cherche une pièce à NOUS pour bloquer cette case précise
+                                for (CircleSize myS : SIZES)
                                 {
-                                    // On place NOTRE pièce pour bloquer
-                                    if(gameManager.getBoard().getFrame(x, y).tryToPlace(color, myS)){
-                                        removeCircle(myS);
-                                        return {x, y};
+                                    // On vérifie si on a la pièce et si la place est libre (notre pièce peut être d'une autre taille !)
+                                    if (hasPiece(myInv, myS) && gameManager.getBoard().getFrame(x, y).getCircle(myS) == nullptr)
+                                    {
+                                        if (gameManager.getBoard().getFrame(x, y).tryToPlace(color, myS))
+                                        {
+                                            removeCircle(myS);
+                                            return {x, y}; // Blocage réussi, on s'arrête là pour ce tour
+                                        }
                                     }
                                 }
                             }
@@ -199,7 +216,7 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
         }
     }
 
-    // Si il existe un case ou placer un cercle est strategique 
+    // Si il existe un case ou placer un cercle est strategique
     if (bestMove.x != -1 && bestScore > 0)
     {
         if (gameManager.getBoard().getFrame(bestMove.x, bestMove.y).tryToPlace(color, bestMove.size))
@@ -209,12 +226,13 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
         }
     }
 
-    // Sinon on pose 'EL CLASSICO' 
+    // Sinon on pose 'EL CLASSICO'
 
     // On check le centre d'abord car comme au morpion ca semble plus strategique
     if (hasPiece(myInv, MEDIUM) && gameManager.getBoard().getFrame(1, 1).getCircle(MEDIUM) == nullptr)
     {
-        if (gameManager.getBoard().getFrame(1, 1).tryToPlace(color, MEDIUM)){
+        if (gameManager.getBoard().getFrame(1, 1).tryToPlace(color, MEDIUM))
+        {
             removeCircle(MEDIUM);
             return {1, 1};
         }
