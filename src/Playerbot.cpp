@@ -107,7 +107,7 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
     CircleColor color = this->getColor();
     PlayerInventory_t myInv = this->getInventory();
 
-    // 1. VICTOIRYYYYYYYY EN 1 COUPS
+    // 1. VICTOIRYYYYYYYY EN 1 COUP
 
     for (int x = 0; x < 3; x++)
     {
@@ -117,13 +117,23 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
             {
                 if (hasPiece(myInv, s) && gameManager.getBoard().getFrame(x, y).getCircle(s) == nullptr)
                 {
-                    if (gameManager.checkWinCondition1(x, y, color, &gameManager.getBoard()))
+                    // POSE VIRTUELLE
+                    if (gameManager.getBoard().getFrame(x, y).tryToPlace(color, s))
                     {
-                        // On gagne direct
-                        if (gameManager.getBoard().getFrame(x, y).tryToPlace(color, s))
+                        // On vérifie les conditions
+                        bool iWin = gameManager.checkWinConditions(x, y, color, &gameManager.getBoard());
+
+                        // NETTOYAGE
+                        gameManager.getBoard().getFrame(x, y).removeCircle(color, s);
+
+                        if (iWin)
                         {
-                            removeCircle(s);
-                            return {x, y};
+                            // Si ça gagne, on pose pour de vrai et on valide
+                            if (gameManager.getBoard().getFrame(x, y).tryToPlace(color, s))
+                            {
+                                removeCircle(s);
+                                return {x, y};
+                            }
                         }
                     }
                 }
@@ -132,13 +142,10 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
     }
 
     // 2. DANGER IMMÉDIAT
-
-    // 2. DANGER IMMÉDIAT
     auto players = gameManager.getPlayers();
 
     for (auto &opponent : players)
     {
-        // On ignore notre propre couleur
         if (opponent->getColor() == color)
             continue;
 
@@ -150,30 +157,32 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
             {
                 for (CircleSize s : SIZES)
                 {
-                    // 1. On vérifie si l'adversaire possède la pièce ET si l'emplacement est libre pour CETTE taille
+                    // Si l'adversaire a la pièce et que l'emplacement est libre
                     if (hasPiece(oppInv, s) && gameManager.getBoard().getFrame(x, y).getCircle(s) == nullptr)
                     {
-                        // On pose virtuellement la pièce de l'adversaire
+
+                        // POSE VIRTUELLE DE L'ADVERSAIRE
                         if (gameManager.getBoard().getFrame(x, y).tryToPlace(opponent->getColor(), s))
                         {
-                            // On vérifie si cette pose le fait gagner
-                            bool opponentWins = gameManager.checkWinConditions(x, y, opponent->getColor(), &gameManager.getBoard());
 
-                            // NETTOYAGE (On retire la pièce virtuelle)
+                            // On verif si il peut gagner comme ca
+                            bool opponentWouldWin = gameManager.checkWinConditions(x, y, opponent->getColor(), &gameManager.getBoard());
+
+                            // ON RETIRE TOUJOURS LA PIÈCE VIRTUELLE
                             gameManager.getBoard().getFrame(x, y).removeCircle(opponent->getColor(), s);
 
-                            if (opponentWins)
+                            if (opponentWouldWin)
                             {
-                                // 2. On cherche une pièce à NOUS pour bloquer cette case précise
+
+                                // On cherche n'importe laquelle de nos pièces pour occuper cette case (même taille ou autre)
                                 for (CircleSize myS : SIZES)
                                 {
-                                    // On vérifie si on a la pièce et si la place est libre (notre pièce peut être d'une autre taille !)
                                     if (hasPiece(myInv, myS) && gameManager.getBoard().getFrame(x, y).getCircle(myS) == nullptr)
                                     {
                                         if (gameManager.getBoard().getFrame(x, y).tryToPlace(color, myS))
                                         {
                                             removeCircle(myS);
-                                            return {x, y}; // Blocage réussi, on s'arrête là pour ce tour
+                                            return {x, y}; // Blocage effectué
                                         }
                                     }
                                 }
@@ -184,7 +193,6 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
             }
         }
     }
-
     // 3. ANALYSE PROFONDE SUR COPIE DU BOARD (RECURSIVE)
     int bestScore = -10000;
     move bestMove = {-1, -1, SMALL};
