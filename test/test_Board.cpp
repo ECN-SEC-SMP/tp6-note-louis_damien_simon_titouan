@@ -27,13 +27,13 @@ TEST(Board_toString, emptyBoard)
 {
     /* Setup */
     Board emptyBoard = Board();
-    std::string expected = "     1     2     3  \n"
+    std::string expected = "     A     B     C  \n"
                            "  ┌─────┬─────┬─────┐\n"
-                           "A │[1m     [0m│[1m     [0m│[1m     [0m│\n"
+                           "1 │[1m     [0m│[1m     [0m│[1m     [0m│\n"
                            "  ├─────┼─────┼─────┤\n"
-                           "B │[1m     [0m│[1m     [0m│[1m     [0m│\n"
+                           "2 │[1m     [0m│[1m     [0m│[1m     [0m│\n"
                            "  ├─────┼─────┼─────┤\n"
-                           "C │[1m     [0m│[1m     [0m│[1m     [0m│\n"
+                           "3 │[1m     [0m│[1m     [0m│[1m     [0m│\n"
                            "  └─────┴─────┴─────┘\n";
 
     /* Test */
