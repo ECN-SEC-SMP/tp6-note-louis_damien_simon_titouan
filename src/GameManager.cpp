@@ -1,6 +1,8 @@
 #include "GameManager.hpp"
 #include "DisplayUtils.hpp"
 
+const std::vector<CircleSize> SIZES = {SMALL, MEDIUM, LARGE};
+
 void GameManager::incrementRoundCount(int n)
 {
     this->roundCount += n;
@@ -14,6 +16,11 @@ int GameManager::getRoundCount() const
 void GameManager::setRoundCount(int roundCount)
 {
     this->roundCount = roundCount;
+}
+
+
+std::array<Player *, 4> GameManager::getPlayers() const {
+    return this->players;
 }
 
 GameManager::GameManager(std::array<Player *, 4> &newPlayers)
@@ -115,7 +122,7 @@ bool GameManager::playRound()
     {
         std::pair<int, int> position = this->players[i]->placeCircle(*this);
 
-        if (checkWinConditions(position.first, position.second, this->players[i]->getColor()))
+        if (checkWinConditions(position.first, position.second, this->players[i]->getColor(),&(this->board)))
         {
             std::cout << "bravo!!" << std::endl;
             setWinner(this->players[i]);
@@ -161,8 +168,226 @@ void GameManager::setWinner(Player *winner)
     this->winnerPlayer = winner;
 }
 
-bool GameManager::checkWinConditions([[maybe_unused]] const int x, [[maybe_unused]] const int y, [[maybe_unused]] const CircleColor targetColor) const
+
+// Check Win
+bool GameManager::checkWinConditions(const int x, const int y, const CircleColor targetColor, const Board* sourceBoard) const
 {
-    // TODO: Implementation needed
+    // On propage le pointeur sourceBoard aux trois sous-conditions
+    return (checkWinCondition1(x, y, targetColor, sourceBoard) || 
+            checkWinCondition2(x, y, targetColor, sourceBoard) || 
+            checkWinCondition3(x, y, targetColor, sourceBoard));
+}
+
+
+// Condition
+bool GameManager::checkWinCondition1(const int x, const int y, const CircleColor targetColor, const Board* sourceBoard) const
+{
+    // Si sourceBoard est fourni, on l'utilise, sinon on utilise le plateau interne
+    const Board& b = (sourceBoard != nullptr) ? *sourceBoard : this->board;
+
+    // on verifie sur les colonnes
+
+    // Ascendant
+    if (b.getFrame(x, 0).getCircle(SMALL) != nullptr &&
+        b.getFrame(x, 1).getCircle(MEDIUM) != nullptr &&
+        b.getFrame(x, 2).getCircle(LARGE) != nullptr)
+    {
+        if (b.getFrame(x, 0).getCircle(SMALL)->getColor() == targetColor &&
+            b.getFrame(x, 1).getCircle(MEDIUM)->getColor() == targetColor &&
+            b.getFrame(x, 2).getCircle(LARGE)->getColor() == targetColor)
+        {
+            return true;
+        }
+    }
+
+    // Descendant
+    if (b.getFrame(x, 0).getCircle(LARGE) != nullptr &&
+        b.getFrame(x, 1).getCircle(MEDIUM) != nullptr &&
+        b.getFrame(x, 2).getCircle(SMALL) != nullptr)
+    {
+        if (b.getFrame(x, 0).getCircle(LARGE)->getColor() == targetColor &&
+            b.getFrame(x, 1).getCircle(MEDIUM)->getColor() == targetColor &&
+            b.getFrame(x, 2).getCircle(SMALL)->getColor() == targetColor)
+        {
+            return true;
+        }
+    }
+
+    // on verifie sur les lignes
+
+    // Ascendant
+    if (b.getFrame(0, y).getCircle(SMALL) != nullptr &&
+        b.getFrame(1, y).getCircle(MEDIUM) != nullptr &&
+        b.getFrame(2, y).getCircle(LARGE) != nullptr)
+    {
+        if (b.getFrame(0, y).getCircle(SMALL)->getColor() == targetColor &&
+            b.getFrame(1, y).getCircle(MEDIUM)->getColor() == targetColor &&
+            b.getFrame(2, y).getCircle(LARGE)->getColor() == targetColor)
+        {
+            return true;
+        }
+    }
+
+    // Descendant
+    if (b.getFrame(0, y).getCircle(LARGE) != nullptr &&
+        b.getFrame(1, y).getCircle(MEDIUM) != nullptr &&
+        b.getFrame(2, y).getCircle(SMALL) != nullptr)
+    {
+        if (b.getFrame(0, y).getCircle(LARGE)->getColor() == targetColor &&
+            b.getFrame(1, y).getCircle(MEDIUM)->getColor() == targetColor &&
+            b.getFrame(2, y).getCircle(SMALL)->getColor() == targetColor)
+        {
+            return true;
+        }
+    }
+
+    if (x == y)
+    { // on est sur la diagonale "/"
+        // Ascendant
+        if (b.getFrame(0, 0).getCircle(SMALL) != nullptr &&
+            b.getFrame(1, 1).getCircle(MEDIUM) != nullptr &&
+            b.getFrame(2, 2).getCircle(LARGE) != nullptr)
+        {
+            if (b.getFrame(0, 0).getCircle(SMALL)->getColor() == targetColor &&
+                b.getFrame(1, 1).getCircle(MEDIUM)->getColor() == targetColor &&
+                b.getFrame(2, 2).getCircle(LARGE)->getColor() == targetColor)
+            {
+                return true;
+            }
+        }
+
+        // Descendant
+        if (b.getFrame(0, 0).getCircle(LARGE) != nullptr &&
+            b.getFrame(1, 1).getCircle(MEDIUM) != nullptr &&
+            b.getFrame(2, 2).getCircle(SMALL) != nullptr)
+        {
+            if (b.getFrame(0, 0).getCircle(LARGE)->getColor() == targetColor &&
+                b.getFrame(1, 1).getCircle(MEDIUM)->getColor() == targetColor &&
+                b.getFrame(2, 2).getCircle(SMALL)->getColor() == targetColor)
+            {
+                return true;
+            }
+        }
+    }
+    if ((x + y) == 2)
+    { // on est sur la diagonale "\"
+        // Ascendant
+        if (b.getFrame(0, 2).getCircle(SMALL) != nullptr &&
+            b.getFrame(1, 1).getCircle(MEDIUM) != nullptr &&
+            b.getFrame(2, 0).getCircle(LARGE) != nullptr)
+        {
+            if (b.getFrame(0, 2).getCircle(SMALL)->getColor() == targetColor &&
+                b.getFrame(1, 1).getCircle(MEDIUM)->getColor() == targetColor &&
+                b.getFrame(2, 0).getCircle(LARGE)->getColor() == targetColor)
+            {
+                return true;
+            }
+        }
+
+        // Descendant
+        if (b.getFrame(0, 2).getCircle(LARGE) != nullptr &&
+            b.getFrame(1, 1).getCircle(MEDIUM) != nullptr &&
+            b.getFrame(2, 0).getCircle(SMALL) != nullptr)
+        {
+            if (b.getFrame(0, 2).getCircle(LARGE)->getColor() == targetColor &&
+                b.getFrame(1, 1).getCircle(MEDIUM)->getColor() == targetColor &&
+                b.getFrame(2, 0).getCircle(SMALL)->getColor() == targetColor)
+            {
+                return true;
+            }
+        }
+    }
+
     return false;
 }
+
+
+bool GameManager::checkWinCondition2(const int x, const int y, CircleColor targetColor, const Board* sourceBoard) const
+{
+    // Si sourceBoard est fourni, on l'utilise, sinon on utilise le plateau interne
+    const Board& b = (sourceBoard != nullptr) ? *sourceBoard : this->board;
+
+    for (CircleSize size : SIZES)
+    {
+        // on verifie sur les colonnes
+
+        if (b.getFrame(x, 0).getCircle(size) != nullptr &&
+            b.getFrame(x, 1).getCircle(size) != nullptr &&
+            b.getFrame(x, 2).getCircle(size) != nullptr)
+        {
+            if (b.getFrame(x, 0).getCircle(size)->getColor() == targetColor &&
+                b.getFrame(x, 1).getCircle(size)->getColor() == targetColor &&
+                b.getFrame(x, 2).getCircle(size)->getColor() == targetColor)
+            {
+                return true;
+            }
+        }
+
+        // on verifie sur les lignes
+
+        if (b.getFrame(0, y).getCircle(size) != nullptr &&
+            b.getFrame(1, y).getCircle(size) != nullptr &&
+            b.getFrame(2, y).getCircle(size) != nullptr)
+        {
+            if (b.getFrame(0, y).getCircle(size)->getColor() == targetColor &&
+                b.getFrame(1, y).getCircle(size)->getColor() == targetColor &&
+                b.getFrame(2, y).getCircle(size)->getColor() == targetColor)
+            {
+                return true;
+            }
+        }
+
+        if (x == y)
+        { // on est sur la diagonale "/"
+
+            if (b.getFrame(0, 0).getCircle(size) != nullptr &&
+                b.getFrame(1, 1).getCircle(size) != nullptr &&
+                b.getFrame(2, 2).getCircle(size) != nullptr)
+            {
+                if (b.getFrame(0, 0).getCircle(size)->getColor() == targetColor &&
+                    b.getFrame(1, 1).getCircle(size)->getColor() == targetColor &&
+                    b.getFrame(2, 2).getCircle(size)->getColor() == targetColor)
+                {
+                    return true;
+                }
+            }
+        }
+
+        else if ((x + y) == 2)
+        { // on est sur la diagonale "\"
+            if (b.getFrame(0, 2).getCircle(size) != nullptr &&
+                b.getFrame(1, 1).getCircle(size) != nullptr &&
+                b.getFrame(2, 0).getCircle(size) != nullptr)
+            {
+                if (b.getFrame(0, 2).getCircle(size)->getColor() == targetColor &&
+                    b.getFrame(1, 1).getCircle(size)->getColor() == targetColor &&
+                    b.getFrame(2, 0).getCircle(size)->getColor() == targetColor)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+bool GameManager::checkWinCondition3(const int x, const int y, const CircleColor targetColor, const Board* sourceBoard) const
+{
+    const Board& b = (sourceBoard != nullptr) ? *sourceBoard : this->board;
+
+    Circle *small = b.getFrame(x, y).getCircle(SMALL);
+    Circle *medium = b.getFrame(x, y).getCircle(MEDIUM);
+    Circle *large = b.getFrame(x, y).getCircle(LARGE);
+
+    if (small != nullptr && medium != nullptr && large != nullptr) {
+        if (small->getColor() == targetColor && 
+            medium->getColor() == targetColor && 
+            large->getColor() == targetColor) {
+            return true;
+        }
+    }
+    return false;
+
+}
+

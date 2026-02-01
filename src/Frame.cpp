@@ -38,7 +38,7 @@ Frame::~Frame()
 
 /* Methods ------------------------------------------------------------------ */
 
-Circle *Frame::getCircle(CircleSize size)
+Circle *Frame::getCircle(CircleSize size) const
 {
     switch (size)
     {
@@ -50,6 +50,24 @@ Circle *Frame::getCircle(CircleSize size)
         return this->largeCircle;
     default:
         return nullptr;
+    }
+}
+
+void Frame::removeCircle(CircleColor c, CircleSize s) {
+    // Delete Large Circle
+    if (s == LARGE && this->largeCircle != nullptr && this->largeCircle->getColor() == c) {
+        delete this->largeCircle;
+        this->largeCircle = nullptr;
+    }
+    // Delete Medium Circle
+    if (s == MEDIUM && this->mediumCircle != nullptr && this->mediumCircle->getColor() == c) {
+        delete this->mediumCircle;
+        this->mediumCircle = nullptr;
+    }
+    // Delete Small Circle
+    if (s == SMALL && this->smallCircle != nullptr && this->smallCircle->getColor() == c) {
+        delete this->smallCircle;
+        this->smallCircle = nullptr;
     }
 }
 

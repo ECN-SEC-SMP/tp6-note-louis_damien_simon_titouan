@@ -16,6 +16,15 @@ std::array<std::array<Frame, 3>, 3> &Board::getFrames()
     return this->frames;
 }
 
+const Frame& Board::getFrame(const int x, const int y) const {
+    return this->frames[x][y];
+}
+
+
+Frame& Board::getFrame(int x, int y) {
+    return this->frames[x][y];
+}
+
 /* Methods ------------------------------------------------------------------ */
 
 std::string Board::toString() const
