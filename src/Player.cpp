@@ -20,19 +20,34 @@ std::pair<int, int> Player::placeCircle(GameManager &gameManager)
     while (!placed)
     {
         // Setup Menu
-        Menu playerMenu(GAME_ASCII_BANNER + gameManager.getBoard().toString() + "\n\n" ANSI_BOLD + this->name + " round: " ANSI_RESET "(select circle size)\n");
-        playerMenu.preventArguments();
-
-        // Add available options
-        if (this->inventory.nbSmallCircles > 0)
-            playerMenu.addOption("Small (" + std::to_string(this->inventory.nbSmallCircles) + ")");
-        if (this->inventory.nbMediumCircles > 0)
-            playerMenu.addOption("Medium (" + std::to_string(this->inventory.nbMediumCircles) + ")");
-        if (this->inventory.nbLargeCircles > 0)
-            playerMenu.addOption("Large (" + std::to_string(this->inventory.nbLargeCircles) + ")");
+        Menu playerMenu = Menu(GAME_ASCII_BANNER + gameManager.getBoard().toString() + "\n\n" ANSI_BOLD + this->name + " round: " ANSI_RESET "(select circle size)\n")
+                              .preventArguments()
+                              .addOption("Small (" + std::to_string(this->inventory.nbSmallCircles) + ")")
+                              .addOption("Medium (" + std::to_string(this->inventory.nbMediumCircles) + ")")
+                              .addOption("Large (" + std::to_string(this->inventory.nbLargeCircles) + ")");
 
         // Get circle size choice
         int choice = playerMenu.run();
+
+        // Check circle availability
+        if (choice == 1 && this->inventory.nbSmallCircles == 0)
+        {
+            std::cout << ANSI_BOLD "No more SMALL circle." ANSI_RESET << std::endl;
+            CONTINUE_ON_ENTER_PROMPT
+            continue;
+        }
+        if (choice == 2 && this->inventory.nbMediumCircles == 0)
+        {
+            std::cout << ANSI_BOLD "No more MEDIUM circle." ANSI_RESET << std::endl;
+            CONTINUE_ON_ENTER_PROMPT
+            continue;
+        }
+        if (choice == 3 && this->inventory.nbLargeCircles == 0)
+        {
+            std::cout << ANSI_BOLD "No more LARGE circle." ANSI_RESET << std::endl;
+            CONTINUE_ON_ENTER_PROMPT
+            continue;
+        }
 
         // Ask coordinates
         std::cout << ANSI_BOLD "Enter frame coordinate: " ANSI_RESET << std::flush;
