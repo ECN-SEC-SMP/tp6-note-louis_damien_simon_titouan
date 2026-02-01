@@ -75,6 +75,7 @@ void Otrio::changeGameMode(OtrioGameMode mode)
     {
         while (this->players.size() > 2)
         {
+            this->availableColors.push_back(this->players.back()->getColor());
             this->players.pop_back();
         }
     }
