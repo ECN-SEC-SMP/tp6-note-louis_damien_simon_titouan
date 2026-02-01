@@ -84,7 +84,7 @@ std::string Render::playerList(std::vector<Player *> players)
     }
     for (auto &&player : players)
     {
-        output += " > " + player->getName() + " " + std::to_string(player->getColor()) + "\n";
+        output += " > " + player->getName() + "\n";
     }
     output += ANSI_RESET;
     return output;
