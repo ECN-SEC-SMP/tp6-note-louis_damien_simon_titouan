@@ -36,7 +36,7 @@ protected:
     }
 };
 
-// --- CATEGORIE 1 : LES DIAGONALES (Condition 1 & 2) ---
+// CATEGORIE 1 : LES DIAGONALES
 
 TEST_F(BotFullTest, BlocksDiagonalMain) {
     Board& b = gm->getBoard();
@@ -60,7 +60,7 @@ TEST_F(BotFullTest, BlocksDiagonalInverse) {
     EXPECT_EQ(move.second, 0) << "Echec: Le bot n'a pas bloque la diagonale inverse (Condition 1)";
 }
 
-// --- CATEGORIE 2 : L'EMBOÎTEMENT (LE BUG PROBABLE) ---
+// L'EMBOÎTEMENT 
 
 TEST_F(BotFullTest, BlocksDangerOnOccupiedFrame) {
     Board& b = gm->getBoard();
@@ -99,15 +99,11 @@ TEST_F(BotFullTest, BlocksConcentricEvenIfOtherColorsPresent) {
     b.getFrame(0, 0).tryToPlace(ORANGE, SMALL);
     b.getFrame(0, 0).tryToPlace(ORANGE, LARGE);
     
-    // PIÈGE : Il y a un SMALL Bleu en (0,0) aussi (si les règles le permettent, ou une autre case)
-    // Ici on teste juste si le bot voit qu'Orange va finir son set de 3 en (0,0)
-    
     auto move = botRed->placeCircle(*gm);
     EXPECT_EQ(move.first, 0);
     EXPECT_EQ(move.second, 0) << "Echec: Le bot n'a pas bloque la victoire concentrique (Condition 3)";
 }
 
-// --- CATEGORIE 3 : LES BINOMES CROISÉS ---
 
 TEST_F(BotFullTest, BlocksDescendingAlignment) {
     Board& b = gm->getBoard();
@@ -120,7 +116,7 @@ TEST_F(BotFullTest, BlocksDescendingAlignment) {
     EXPECT_EQ(move.second, 0);
 }
 
-// --- CATEGORIE 4 : INVENTAIRE ET PRIORITÉ ---
+// INVENTAIRE
 
 TEST_F(BotFullTest, PriorityToWinOverBlock) {
     Board& b = gm->getBoard();

@@ -38,11 +38,14 @@ PlayerInventory_t subPiece(PlayerInventory_t inv, CircleSize s)
     return inv;
 }
 
+
+// Utilitaire pour actualiser un inventaire
 void PlayerBot::setInventory(PlayerInventory_t newInv)
 {
     this->inventory = newInv;
 }
 
+// Utilitaire pour modifier l inventaire
 void PlayerBot::removeCircle(CircleSize s)
 {
     PlayerInventory_t myInv = this->getInventory();
@@ -64,7 +67,7 @@ int PlayerBot::evaluateRecursive(Board &simBoard, PlayerInventory_t simInv, int 
     if (depth == 0)
         return 0;
 
-    // On parcourt toutes les cases pour simuler NOTRE prochain coup
+    // On parcourt toutes les cases pour simuler notre prochain coup
     for (int x = 0; x < 3; x++)
     {
         for (int y = 0; y < 3; y++)
@@ -117,13 +120,13 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
             {
                 if (hasPiece(myInv, s) && gameManager.getBoard().getFrame(x, y).getCircle(s) == nullptr)
                 {
-                    // POSE VIRTUELLE
+                    // Pose virtuelle
                     if (gameManager.getBoard().getFrame(x, y).tryToPlace(color, s))
                     {
                         // On vérifie les conditions
                         bool iWin = gameManager.checkWinConditions(x, y, color, &gameManager.getBoard());
 
-                        // NETTOYAGE
+                        // Nettoyage
                         gameManager.getBoard().getFrame(x, y).removeCircle(color, s);
 
                         if (iWin)
@@ -142,6 +145,7 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
     }
 
     // 2. DANGER IMMÉDIAT
+
     auto players = gameManager.getPlayers();
 
     for (auto &opponent : players)
@@ -161,14 +165,14 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
                     if (hasPiece(oppInv, s) && gameManager.getBoard().getFrame(x, y).getCircle(s) == nullptr)
                     {
 
-                        // POSE VIRTUELLE DE L'ADVERSAIRE
+                        // Pose virtuelle de l'adversaire
                         if (gameManager.getBoard().getFrame(x, y).tryToPlace(opponent->getColor(), s))
                         {
 
                             // On verif si il peut gagner comme ca
                             bool opponentWouldWin = gameManager.checkWinConditions(x, y, opponent->getColor(), &gameManager.getBoard());
 
-                            // ON RETIRE TOUJOURS LA PIÈCE VIRTUELLE
+                            // On retire la piece de l adversaire que l on vient de placer
                             gameManager.getBoard().getFrame(x, y).removeCircle(opponent->getColor(), s);
 
                             if (opponentWouldWin)
@@ -182,7 +186,8 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
                                         if (gameManager.getBoard().getFrame(x, y).tryToPlace(color, myS))
                                         {
                                             removeCircle(myS);
-                                            return {x, y}; // Blocage effectué
+                                             // Blocage effectué
+                                            return {x, y};
                                         }
                                     }
                                 }
@@ -193,7 +198,9 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
             }
         }
     }
-    // 3. ANALYSE PROFONDE SUR COPIE DU BOARD (RECURSIVE)
+
+    // 3. ANALYSE PROFONDE SUR COPIE DU BOARD 
+
     int bestScore = -10000;
     move bestMove = {-1, -1, SMALL};
 
@@ -205,13 +212,13 @@ std::pair<int, int> PlayerBot::placeCircle(GameManager &gameManager)
             {
                 if (hasPiece(myInv, sType) && gameManager.getBoard().getFrame(x, y).getCircle(sType) == nullptr)
                 {
-                    // COPIE DE LA BOARD POUR SIMULER
+                    // Copie de board pour simuler
                     Board boardCopy = Board(gameManager.getBoard());
 
-                    // SIMULATION DE NOTRE PREMIER COUP
+                    // On simule notre premier coup
                     boardCopy.getFrame(x, y).tryToPlace(color, sType);
 
-                    // CALCUL SCORE AVEC RÉCURSION ( profondeur 3 pour le TP)
+                    // CALCUL SCORE AVEC RÉCURSION ( profondeur 3 )
                     int currentScore = evaluateRecursive(boardCopy, subPiece(myInv, sType), 3, gameManager, color);
 
                     if (currentScore > bestScore)
