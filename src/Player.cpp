@@ -90,10 +90,10 @@ std::pair<int, int> Player::placeCircle(GameManager &gameManager)
             this->inventory.nbSmallCircles--;
             break;
         case MEDIUM:
-            this->inventory.nbSmallCircles--;
+            this->inventory.nbMediumCircles--;
             break;
         case LARGE:
-            this->inventory.nbSmallCircles--;
+            this->inventory.nbLargeCircles--;
             break;
         default:
             break;

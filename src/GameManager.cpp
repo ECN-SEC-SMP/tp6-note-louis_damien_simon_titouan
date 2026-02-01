@@ -1,4 +1,5 @@
 #include "GameManager.hpp"
+#include "DisplayUtils.hpp"
 
 void GameManager::incrementRoundCount(int n)
 {
@@ -79,6 +80,16 @@ void GameManager::choosePlayerOrder()
     std::mt19937 gen(rd());
     // Randomise players orders
     std::shuffle(this->players.begin(), this->players.end(), gen);
+}
+
+std::string GameManager::renderBoard()
+{
+    std::vector<Player *> vplayers;
+    for (auto &&p : this->players)
+    {
+        vplayers.push_back(p);
+    }
+    return Render::board(this->board) + "\n\n" + Render::playersInventory(vplayers);
 }
 
 bool GameManager::playRound()

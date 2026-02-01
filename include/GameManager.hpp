@@ -33,20 +33,20 @@ public:
     // Tool function
     bool isLastRound() const;
     void choosePlayerOrder();
+    std::string renderBoard();
+
     // Constructor and Destructor
     GameManager(std::array<Player *, 4> &newPlayers);
     ~GameManager();
 
     // Getters and setters
+    Board &getBoard();
     int getRoundCount() const;
     void setRoundCount(int roundCount);
     void incrementRoundCount(int n);
+    Player *getWinner();
     void setWinner(Player *winner);
 
     // Game turn management
     void startGame();
-
-    // Getters
-    Board &getBoard();
-    Player *getWinner();
 };
