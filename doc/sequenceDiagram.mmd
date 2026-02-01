@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant User
+    participant Otrio
+    participant GameManager
+    participant Player
+    participant Board
+    participant Frame
+
+    User->>Otrio: run()
+    Otrio->>GameManager: new GameManager(players)
+    Otrio->>GameManager: manageGame()
+    GameManager->>GameManager: startGame()
+    GameManager->>GameManager: choosePlayerOrder()
+    
+    loop Tant que pas de gagnant et tours restants
+        GameManager->>GameManager: playRound()
+        loop Pour chaque joueur
+            GameManager->>Player: placeCircle(gameManager)
+            Player->>User: demande position (x, y) et taille
+            User-->>Player: saisie clavier
+            Player->>Board: getFrame(x, y)
+            Board-->>Player: frame
+            Player->>Frame: tryToPlace(circle)
+            Frame-->>Player: success
+            Player-->>GameManager: coup joué
+            GameManager->>GameManager: checkWinConditions()
+            alt Victoire détectée
+                GameManager->>GameManager: setWinner(player)
+            end
+        end
+    end
+    
+    GameManager-->>Otrio: fin de partie
+    Otrio-->>User: affichage du vainqueur
