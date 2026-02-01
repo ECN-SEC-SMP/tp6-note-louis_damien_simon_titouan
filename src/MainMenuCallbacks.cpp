@@ -99,9 +99,17 @@ Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &otrio)
         if (winner)
         {
             Menu::clear();
-            // #TODO: print board
-            std::cout << std::endl
-                      << winner->getName() + " won the game!" << std::endl
+            std::cout << gameManager.renderBoard()
+                      << std::endl
+                      << ANSI_BOLD ANSI_UNDERLINE + winner->getName() + " won the game!" ANSI_RESET << std::endl
+                      << std::endl;
+        }
+        else
+        {
+            Menu::clear();
+            std::cout << gameManager.renderBoard()
+                      << std::endl
+                      << ANSI_BOLD ANSI_UNDERLINE "GAME OVER!" ANSI_RESET << std::endl
                       << std::endl;
         }
         CONTINUE_ON_ENTER_PROMPT
