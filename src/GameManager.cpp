@@ -78,7 +78,23 @@ void GameManager::choosePlayerOrder()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    // Randomise players orders
+
+    // Check if game mode is TwoPlayer
+    if (this->players.at(0)->getName() == this->players.at(2)->getName())
+    {
+        if (gen() % 2) // Change on pair numbers
+        {
+            auto playerCopy = this->players;
+            for (size_t i = 0; i < this->players.size(); i++)
+            {
+                int index = (i + 1) % this->players.size();
+                this->players[i] = playerCopy.at(index);
+            }
+        }
+        return;
+    }
+
+    // Else randomise players orders
     std::shuffle(this->players.begin(), this->players.end(), gen);
 }
 
