@@ -30,7 +30,7 @@ public:
      * @param[in] name Name of the player
      */
     Player(CircleColor color, std::string name);
-    ~Player();
+    virtual ~Player();
     /**
      * @brief Prompt player and place his circle
      *
