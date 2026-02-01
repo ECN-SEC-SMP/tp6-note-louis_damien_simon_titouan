@@ -17,9 +17,14 @@ Simon CAU
 
 ### Damien
 - classe Board
+  - unit tests for string output
+  - rename "wall" en "grid"
 - classe Frame
 - classe Circle
 - classe Player
+- Render
+  - board
+  - playersInventory
 
 
 ### Simon

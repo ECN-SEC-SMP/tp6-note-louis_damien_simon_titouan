@@ -3,7 +3,7 @@
 
 #define NB_SLOTS_IN_PLAYER_INVENTORY 3
 
-std::string Render::board(Board board)
+std::string Render::board(const Board &board)
 {
     return board.toString();
 }

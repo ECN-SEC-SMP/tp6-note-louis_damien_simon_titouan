@@ -2,13 +2,29 @@
 
 #include <array>
 
+#include "BoardStyle.hpp"
 #include "Frame.hpp"
+
+#define BOARD_SIZE 3
 
 struct BoardStyle_t
 {
-    std::string horizontalWall = "-----";
-    std::string verticalWall = "¦";
-    std::string wallNode = "+";
+    std::string horizontalSeparator = HORIZONTAL_SEPARATOR_SIMPLE;
+    std::string verticalSeparator = VERTICAL_SEPARATOR_SIMPLE;
+
+    std::string node_middle = NODE_MIDDLE_SIMPLE;
+    std::string node_horizontal = NODE_HORIZONTAL_SIMPLE;
+    std::string node_vertical = NODE_VERTICAL_SIMPLE;
+
+    std::string node_top = NODE_TOP_SIMPLE;
+    std::string node_left = NODE_LEFT_SIMPLE;
+    std::string node_right = NODE_RIGHT_SIMPLE;
+    std::string node_bottom = NODE_BOTTOM_SIMPLE;
+
+    std::string node_top_left = NODE_TOP_LEFT_SIMPLE;
+    std::string node_top_right = NODE_TOP_RIGHT_SIMPLE;
+    std::string node_bottom_left = NODE_BOTTOM_LEFT_SIMPLE;
+    std::string node_bottom_right = NODE_BOTTOM_RIGHT_SIMPLE;
 };
 
 /**
@@ -35,9 +51,32 @@ private:
      *
      * This member variable stores the current style configuration for the board's appearance
      * and rendering. It determines how the board is displayed to the player.
-     * It contains the characters used for horizontal and vertical walls, and wall nodes.
+     * It contains the characters used for horizontal and vertical separators, and grid nodes.
      */
     BoardStyle_t boardStyle;
+
+    /**
+     * @brief Converts a coordinate value to its corresponding board array index.
+     *
+     * This helper function maps a given coordinate to the internal 0-based index used in the `frames` array.
+     * It ensures that external coordinates correctly access the intended row or column.
+     *
+     * @param coord The coordinate value to convert.
+     * @return int The corresponding 0-based index in the board's `frames` array.
+     *
+     * @note The function assumes that the input `coord` is within the valid range for the board.
+     */
+    int axisIndexFromCoord(int coord) const;
+
+    /**
+     * @brief Computes the grid node representation at the specified coordinates.
+     *
+     * @param x The x-coordinate of the position on the board.
+     * @param y The y-coordinate of the position on the board.
+     *
+     * @return std::string The string representation of the grid node at position (x, y).
+     */
+    std::string computeGridNode(int x, int y) const;
 
 public:
     /**
