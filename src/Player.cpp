@@ -20,7 +20,7 @@ std::pair<int, int> Player::placeCircle(GameManager &gameManager)
     while (!placed)
     {
         // Setup Menu
-        Menu playerMenu = Menu(GAME_ASCII_BANNER + gameManager.getBoard().toString() + "\n\n" ANSI_BOLD + this->name + " round: " ANSI_RESET "(select circle size)\n")
+        Menu playerMenu = Menu(GAME_ASCII_BANNER + gameManager.renderBoard() + "\n\n" ANSI_BOLD + this->name + " round: " ANSI_RESET "(select circle size)\n")
                               .preventArguments()
                               .addOption("Small (" + std::to_string(this->inventory.nbSmallCircles) + ")")
                               .addOption("Medium (" + std::to_string(this->inventory.nbMediumCircles) + ")")
