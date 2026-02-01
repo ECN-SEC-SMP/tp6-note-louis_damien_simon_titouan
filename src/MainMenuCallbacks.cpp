@@ -18,20 +18,6 @@ bool MainMenu::CB_notImplementedYet(int pos, Menu *m)
     return false;
 }
 
-bool MainMenu::CB_printHelp(int pos, Menu *m)
-{
-    Menu::clear();
-
-    std::cout << GAME_ASCII_BANNER;
-    std::cout << ANSI_BOLD "Help Page" ANSI_RESET_BOLD << std::endl
-              << std::endl;
-    std::cout << "NOT IMPLEMENTED YET" << std::endl;
-    std::cout << std::endl;
-    CONTINUE_ON_ENTER_PROMPT
-
-    return true;
-}
-
 Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &otrio)
 {
     auto lambda_cb = [&](int pos, Menu *m)
@@ -219,6 +205,59 @@ Menu::MenuCallback_t MainMenu::gameMode_CBBuilder(Otrio &otrio)
         return false;
     };
     return lambda_cb;
+}
+
+bool MainMenu::CB_printHelp(int pos, Menu *m)
+{
+    Menu::clear();
+
+    std::cout << GAME_ASCII_BANNER;
+    std::cout << ANSI_BOLD "Help Page" ANSI_RESET_BOLD << std::endl
+              << std::endl;
+
+    std::cout << ANSI_UNDERLINE "Rules:" ANSI_RESET_UNDERLINE << std::endl;
+    std::cout << " 1. The goal of OTRIO is to align or stack three circles" << std::endl;
+    std::cout << "    of your own color." << std::endl;
+    std::cout << " 2. Each player has " ANSI_UNDERLINE "9 circles" ANSI_RESET_UNDERLINE ":" << std::endl;
+    std::cout << "    3 Small, 3 Medium, and 3 Large." << std::endl;
+    std::cout << " 3. The board is a 3x3 grid. Each cell can contain up to" << std::endl;
+    std::cout << "    three circles (Small inside Medium inside Large)." << std::endl;
+    std::cout << " 4. Players take turns placing " ANSI_UNDERLINE "one circle" ANSI_RESET_UNDERLINE " of their color" << std::endl;
+    std::cout << "    and chosen size on a valid position." << std::endl;
+    std::cout << " 5. A move is valid only if the selected size is still available" << std::endl;
+    std::cout << "    and the position for that size is free." << std::endl;
+
+    std::cout << std::endl;
+    std::cout << ANSI_UNDERLINE "Winning conditions:" ANSI_RESET_UNDERLINE << std::endl;
+    std::cout << " A player immediately wins if they achieve one of the following:" << std::endl;
+    std::cout << " 1. An alignment of three identical circles (same size)." << std::endl;
+    std::cout << " 2. An alignment of three circles in increasing or decreasing size." << std::endl;
+    std::cout << " 3. A complete stack of Small, Medium, and Large circles" << std::endl;
+    std::cout << "    on the same cell." << std::endl;
+
+    std::cout << std::endl;
+    std::cout << ANSI_UNDERLINE "Game modes:" ANSI_RESET_UNDERLINE << std::endl;
+    std::cout << " - 4 Players: each player controls one color." << std::endl;
+    std::cout << " - 2 Players: each player controls two colors alternately." << std::endl;
+    std::cout << "   Victory is valid for a single color only." << std::endl;
+
+    std::cout << std::endl;
+    std::cout << ANSI_UNDERLINE "Game commands:" ANSI_RESET_UNDERLINE << std::endl;
+    std::cout << " Use the arrow keys to move the cursor." << std::endl;
+    std::cout << " Press " << key("[ENTER]") " to select a circle size or a board position." << std::endl;
+    std::cout << " The enter coordinates to place the selected circle (eg.: A1)." << std::endl;
+    std::cout << " A turn consists of selecting a size, then placing it on the board." << std::endl;
+
+    std::cout << ANSI_BLUE;
+    std::cout << "                              [UP]" << std::endl;
+    std::cout << "                             [ENTER]" << std::endl;
+    std::cout << "                             [DOWN]" << std::endl;
+    std::cout << ANSI_RESET;
+
+    std::cout << std::endl;
+    CONTINUE_ON_ENTER_PROMPT
+
+    return true;
 }
 
 // Menu::MenuCallback_t MainMenu::function_CBBuilder(Otrio &otrio)
