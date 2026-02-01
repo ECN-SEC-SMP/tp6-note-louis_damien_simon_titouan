@@ -85,7 +85,8 @@ Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &otrio)
         if (winner)
         {
             Menu::clear();
-            std::cout << gameManager.renderBoard()
+            std::cout << GAME_ASCII_BANNER
+                      << gameManager.renderBoard()
                       << std::endl
                       << ANSI_BOLD ANSI_UNDERLINE + winner->getName() + " won the game!" ANSI_RESET << std::endl
                       << std::endl;
@@ -93,7 +94,8 @@ Menu::MenuCallback_t MainMenu::play_CBBuilder(Otrio &otrio)
         else
         {
             Menu::clear();
-            std::cout << gameManager.renderBoard()
+            std::cout << GAME_ASCII_BANNER
+                      << gameManager.renderBoard()
                       << std::endl
                       << ANSI_BOLD ANSI_UNDERLINE "GAME OVER!" ANSI_RESET << std::endl
                       << std::endl;
