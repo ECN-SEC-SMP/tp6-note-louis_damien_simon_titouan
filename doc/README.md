@@ -35,6 +35,13 @@ Menu gère les choix utilisateur via des callbacks séparés pour rester testabl
 
 ## Tests
 Des tests unitaires couvrent Board, Frame, GameManager et le bot pour valider les comportements essentiels. 
+Pour la partie graphique (menus et gameplay), les tests unitaires sont compliqués. Afin de la tester, il faut:
+- Vérifier toutes les options dans le menu principal:
+    - Exit
+    - Help
+    - Game Mode: Changement du mode de jeu (doit suprimer les joueurs en trop pour le TwoPlayer mode)
+    - Add/Remove player: Même nom
+    - Play: Jouer au jeu (enter des coordonnées invalides : 2A, djjs, ... ; ou emplacement incorrect: circle déjà présent, ...)
 
 ## Évolutions possibles
 - Améliorer l'IA du bot sans modifier GameManager.
