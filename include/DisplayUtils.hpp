@@ -81,3 +81,8 @@ namespace Render
    */
   std::string playersInventory(std::vector<Player *> players);
 } // namespace Render
+
+namespace DisplayUtils
+{
+  std::string getAnsiCodeFromCircleColor(CircleColor color);
+} // namespace DisplayUtils

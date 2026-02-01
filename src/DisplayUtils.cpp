@@ -94,3 +94,21 @@ std::string Render::gameMode(OtrioGameMode mode)
 {
     return (mode == TWO_PLAYER ? "2 players" : "4 players");
 }
+
+std::string DisplayUtils::getAnsiCodeFromCircleColor(CircleColor color)
+{
+    switch (color)
+    {
+    case RED:
+        return ANSI_RED;
+    case GREEN:
+        return ANSI_GREEN;
+    case BLUE:
+        return ANSI_BLUE;
+    case ORANGE:
+        return ANSI_ORANGE;
+
+    default:
+        return "";
+    }
+}

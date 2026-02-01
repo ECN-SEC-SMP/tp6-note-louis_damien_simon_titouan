@@ -2,14 +2,12 @@
 
 #include "ANSI.hpp"
 #include "Frame.hpp"
+#include "DisplayUtils.hpp"
 
 /* Utils -------------------------------------------------------------------- */
-
-static std::string getAnsiCodeFromCircleColor(CircleColor color);
 static std::string concatFrameStringArray(std::array<std::string, 5> stringArray);
 
 /* Constructors ------------------------------------------------------------- */
-
 Frame::Frame()
 {
     this->smallCircle = nullptr;
@@ -53,19 +51,23 @@ Circle *Frame::getCircle(CircleSize size) const
     }
 }
 
-void Frame::removeCircle(CircleColor c, CircleSize s) {
+void Frame::removeCircle(CircleColor c, CircleSize s)
+{
     // Delete Large Circle
-    if (s == LARGE && this->largeCircle != nullptr && this->largeCircle->getColor() == c) {
+    if (s == LARGE && this->largeCircle != nullptr && this->largeCircle->getColor() == c)
+    {
         delete this->largeCircle;
         this->largeCircle = nullptr;
     }
     // Delete Medium Circle
-    if (s == MEDIUM && this->mediumCircle != nullptr && this->mediumCircle->getColor() == c) {
+    if (s == MEDIUM && this->mediumCircle != nullptr && this->mediumCircle->getColor() == c)
+    {
         delete this->mediumCircle;
         this->mediumCircle = nullptr;
     }
     // Delete Small Circle
-    if (s == SMALL && this->smallCircle != nullptr && this->smallCircle->getColor() == c) {
+    if (s == SMALL && this->smallCircle != nullptr && this->smallCircle->getColor() == c)
+    {
         delete this->smallCircle;
         this->smallCircle = nullptr;
     }
@@ -110,7 +112,7 @@ std::string Frame::toString() const
     // Add large circle brackets if present
     if (this->largeCircle != nullptr)
     {
-        std::string circleAnsiColor = getAnsiCodeFromCircleColor(this->largeCircle->getColor());
+        std::string circleAnsiColor = DisplayUtils::getAnsiCodeFromCircleColor(this->largeCircle->getColor());
         frameStrArray[0] = circleAnsiColor + "(";
         frameStrArray[4] = circleAnsiColor + ")";
     }
@@ -118,7 +120,7 @@ std::string Frame::toString() const
     // Add medium circle brackets if present
     if (this->mediumCircle != nullptr)
     {
-        std::string circleAnsiColor = getAnsiCodeFromCircleColor(this->mediumCircle->getColor());
+        std::string circleAnsiColor = DisplayUtils::getAnsiCodeFromCircleColor(this->mediumCircle->getColor());
         frameStrArray[1] = circleAnsiColor + "(";
         frameStrArray[3] = circleAnsiColor + ")";
     }
@@ -126,7 +128,7 @@ std::string Frame::toString() const
     // Add small circle symbol if present
     if (this->smallCircle != nullptr)
     {
-        std::string circleAnsiColor = getAnsiCodeFromCircleColor(this->smallCircle->getColor());
+        std::string circleAnsiColor = DisplayUtils::getAnsiCodeFromCircleColor(this->smallCircle->getColor());
         frameStrArray[2] = circleAnsiColor + "o";
     }
 
@@ -160,24 +162,6 @@ Frame &Frame::operator=(const Frame &frame)
 }
 
 /* Utils -------------------------------------------------------------------- */
-
-static std::string getAnsiCodeFromCircleColor(CircleColor color)
-{
-    switch (color)
-    {
-    case RED:
-        return ANSI_RED;
-    case GREEN:
-        return ANSI_GREEN;
-    case BLUE:
-        return ANSI_BLUE;
-    case ORANGE:
-        return ANSI_ORANGE;
-
-    default:
-        return "";
-    }
-}
 
 static std::string concatFrameStringArray(std::array<std::string, 5> stringArray)
 {
