@@ -8,19 +8,22 @@ std::string Render::board(const Board &board)
     return board.toString();
 }
 
-std::string Render::playerInventory(Player *player)
+std::string Render::playerInventory(Player *player, std::string playerNameMargin)
 {
+    /* Player string representation: "<margin> PlayerName → SLOT1_REPR, SLOT2_REPR, SLOT3_REPR" */
     std::string playerStringRepr;
 
+    /* Get player data */
     PlayerInventory_t playerInventory = player->getInventory();
     CircleColor playerColor = player->getColor();
 
     /* To simplify slot representation, we use Frame objects and its toString() method */
     std::array<Frame, NB_SLOTS_IN_PLAYER_INVENTORY> inventorySlots;
 
-    /* Player string representation: "PlayerName: SLOT1_REPR, SLOT2_REPR, SLOT3_REPR" */
+    /* Start creating player string representation */
+    playerStringRepr += playerNameMargin;
     playerStringRepr += player->getName();
-    playerStringRepr += ": ";
+    playerStringRepr += " → ";
 
     /* Place circles in inventory slots */
     for (int slotIdx = 0; slotIdx < NB_SLOTS_IN_PLAYER_INVENTORY; slotIdx++)
@@ -53,10 +56,20 @@ std::string Render::playersInventory(std::vector<Player *> players)
 {
     std::string outputString = "";
 
+    /* Find longest player name */
+    int maxPlayerNameLength = 0;
+    for (Player *player : players)
+    {
+        int playerNameLength = player->getName().length();
+        if (playerNameLength > maxPlayerNameLength)
+            maxPlayerNameLength = playerNameLength;
+    }
+
     for (Player *player : players)
     {
         /* Add string representation of the player to the output string */
-        outputString += Render::playerInventory(player) + "\n";
+        std::string playerNameMargin = std::string(maxPlayerNameLength - player->getName().length(), ' ');
+        outputString += Render::playerInventory(player, playerNameMargin) + "\n";
     }
 
     return outputString;
