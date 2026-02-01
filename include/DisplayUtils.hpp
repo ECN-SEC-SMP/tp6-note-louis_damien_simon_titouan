@@ -71,7 +71,7 @@ namespace Render
    *
    * @see Player
    */
-  std::string playerInventory(Player *player);
+  std::string playerInventory(Player *player, std::string playerNameMargin = "");
 
   /**
    * @brief Generates a string representation of all players' inventories.
